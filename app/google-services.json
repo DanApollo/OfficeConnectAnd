@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "341468820874",
+    "firebase_url": "https://sky-go-hybrid-calendar-app-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "sky-go-hybrid-calendar-app",
+    "storage_bucket": "sky-go-hybrid-calendar-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341468820874:android:93490b3ff9860c951b8473",
+        "android_client_info": {
+          "package_name": "com.sky.officeconnectandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341468820874-aqhrvk17s8rnm88cnj131o546e1f335l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy_ko6ZEh-3_a97mpJ7JPfpLx3I9-Yk20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341468820874-aqhrvk17s8rnm88cnj131o546e1f335l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "341468820874-77mnacqsf1p5mmgdpeuk5bl4360lplgb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Julien-Mahe-Crenn.Sky-Go-iOS-Calendar-App"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
