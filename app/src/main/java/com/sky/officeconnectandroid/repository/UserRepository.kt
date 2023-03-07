@@ -20,16 +20,6 @@ class UserRepository {
 
     private val database: DatabaseReference = Firebase.database.reference
 
-    val userListener = object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
-        }
-    }
-
     fun addUser(name: String, location: String, department: String, jobTitle: String) {
         val user = User(name, location, department, jobTitle)
 
