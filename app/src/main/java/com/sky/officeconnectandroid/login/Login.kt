@@ -67,8 +67,7 @@ fun LoginScreen(
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(28.dp)
-                )
-                .padding(top = 10.dp),
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -91,6 +90,7 @@ fun LoginScreen(
                             drawRect(brush, blendMode = BlendMode.SrcAtop)
                         }
                     }
+                    .padding(vertical = 10.dp)
             )
             if (isError) {
                 Text(
@@ -98,10 +98,12 @@ fun LoginScreen(
                     color = Color.Red
                 )
             }
+            Text(text = "Sign in with your Office Connect account.")
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(vertical = 4.dp),
                 value = loginUiState?.email ?: "",
                 onValueChange = { loginViewModel?.onEmailChange(it) },
                 leadingIcon = {
@@ -120,7 +122,8 @@ fun LoginScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 4.dp),
                 value = loginUiState?.password ?: "",
                 onValueChange = { loginViewModel?.onPasswordChange(it) },
                 leadingIcon = {
@@ -137,8 +140,14 @@ fun LoginScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 isError = isError
             )
-            Button(onClick = { loginViewModel?.loginUser(context) }) {
-                Text(text = "Sign In")
+            Button(
+                onClick = { loginViewModel?.loginUser(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+            ) {
+                Text(text = "Continue")
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
