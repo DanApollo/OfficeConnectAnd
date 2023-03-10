@@ -32,8 +32,8 @@ fun LoginScreen(
     onNavToHomePage: () -> Unit,
     onNavToSignUpPage: () -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
-    val isError = loginUiState?.loginError != null
+    val loginUIState = loginViewModel?.loginUIState
+    val isError = loginUIState?.loginError != null
     val context = LocalContext.current
 
     Box(
@@ -94,7 +94,7 @@ fun LoginScreen(
             )
             if (isError) {
                 Text(
-                    text = loginUiState?.loginError ?: "unknown error",
+                    text = loginUIState?.loginError ?: "unknown error",
                     color = Color.Red
                 )
             }
@@ -102,7 +102,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                value = loginUiState?.email ?: "",
+                value = loginUIState?.email ?: "",
                 onValueChange = { loginViewModel?.onEmailChange(it) },
                 leadingIcon = {
                     Icon(
@@ -121,7 +121,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                value = loginUiState?.password ?: "",
+                value = loginUIState?.password ?: "",
                 onValueChange = { loginViewModel?.onPasswordChange(it) },
                 leadingIcon = {
                     Icon(
@@ -151,7 +151,7 @@ fun LoginScreen(
                     Text(text = "Sign Up")
                 }
             }
-            if (loginUiState?.isLoading == true) {
+            if (loginUIState?.isLoading == true) {
                 CircularProgressIndicator()
             }
             LaunchedEffect(key1 = loginViewModel?.hasUser) {
@@ -169,7 +169,7 @@ fun SignUpScreen(
     onNavToHomePage: () -> Unit,
     onNavToLoginPage: () -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
+    val loginUiState = loginViewModel?.loginUIState
     val isError = loginUiState?.signUpError != null
     val context = LocalContext.current
 

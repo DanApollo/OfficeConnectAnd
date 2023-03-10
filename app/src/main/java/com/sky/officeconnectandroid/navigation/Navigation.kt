@@ -10,6 +10,7 @@ import com.sky.officeconnectandroid.home.Home
 import com.sky.officeconnectandroid.login.LoginScreen
 import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.login.SignUpScreen
+import com.sky.officeconnectandroid.myprofile.MyProfile
 
 @Composable
 fun Navigation(
@@ -68,6 +69,20 @@ fun Navigation(
                     navController.navigate(Screen.LoginScreen.route) {
                         launchSingleTop = true
                         popUpTo(route = Screen.HomeScreen.route) { inclusive = true }
+                    }
+                },
+                onNavToMyProfile = {
+                    navController.navigate((Screen.MyProfile.route)) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+        composable(route = Screen.MyProfile.route) {
+            MyProfile(
+                onNavToHomePage = {
+                    navController.navigate(Screen.HomeScreen.route) {
+                        launchSingleTop = true
                     }
                 }
             )
