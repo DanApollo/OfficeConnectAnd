@@ -1,7 +1,6 @@
 package com.sky.officeconnectandroid.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,77 +20,77 @@ class LoginViewModel(
     val hasUser: Boolean
         get() = authRepository.hasUser()
 
-    var loginUiState by mutableStateOf(LoginUiState())
+    var loginUIState by mutableStateOf(LoginUIState())
         private set
 
     fun onEmailChange(email: String) {
-        loginUiState = loginUiState.copy(email = email)
+        loginUIState = loginUIState.copy(email = email)
     }
 
     fun onPasswordChange(password: String) {
-        loginUiState = loginUiState.copy(password = password)
+        loginUIState = loginUIState.copy(password = password)
     }
 
     fun onEmailSignUpChange(email: String) {
-        loginUiState = loginUiState.copy(emailSignUp = email)
+        loginUIState = loginUIState.copy(emailSignUp = email)
     }
 
     fun onNameSignUpChange(name: String) {
-        loginUiState = loginUiState.copy(nameSignUp = name)
+        loginUIState = loginUIState.copy(nameSignUp = name)
     }
 
     fun onJobTitleSignUpChange(jobTitle: String) {
-        loginUiState = loginUiState.copy(jobTitleSignUp = jobTitle)
+        loginUIState = loginUIState.copy(jobTitleSignUp = jobTitle)
     }
 
     fun onLocationSignUpChange(location: String) {
-        loginUiState = loginUiState.copy(locationSignUp = location)
+        loginUIState = loginUIState.copy(locationSignUp = location)
     }
 
     fun onDepartmentSignUpChange(department: String) {
-        loginUiState = loginUiState.copy(departmentSignUp = department)
+        loginUIState = loginUIState.copy(departmentSignUp = department)
     }
 
     fun onPasswordSignUpChange(password: String) {
-        loginUiState = loginUiState.copy(passwordSignUp = password)
+        loginUIState = loginUIState.copy(passwordSignUp = password)
     }
 
     fun onConfirmPasswordChange(password: String) {
-        loginUiState = loginUiState.copy(confirmPasswordSignUp = password)
+        loginUIState = loginUIState.copy(confirmPasswordSignUp = password)
     }
 
     private fun validateLoginForm() =
-        loginUiState.email.isNotBlank() &&
-                loginUiState.password.isNotBlank()
+        loginUIState.email.isNotBlank() &&
+                loginUIState.password.isNotBlank()
 
     private fun validateSignUpForm() =
-        loginUiState.emailSignUp.isNotBlank() &&
-                loginUiState.nameSignUp.isNotBlank() &&
-                loginUiState.jobTitleSignUp.isNotBlank() &&
-                loginUiState.locationSignUp.isNotBlank() &&
-                loginUiState.departmentSignUp.isNotBlank() &&
-                loginUiState.passwordSignUp.isNotBlank() &&
-                loginUiState.confirmPasswordSignUp.isNotBlank()
+        loginUIState.emailSignUp.isNotBlank() &&
+                loginUIState.nameSignUp.isNotBlank() &&
+                loginUIState.jobTitleSignUp.isNotBlank() &&
+                loginUIState.locationSignUp.isNotBlank() &&
+                loginUIState.departmentSignUp.isNotBlank() &&
+                loginUIState.passwordSignUp.isNotBlank() &&
+                loginUIState.confirmPasswordSignUp.isNotBlank()
 
     fun createUser(context: Context) = viewModelScope.launch {
         try {
-            loginUiState = loginUiState.copy(isLoading = true)
+            loginUIState = loginUIState.copy(isLoading = true)
             if (!validateSignUpForm()) {
                 throw java.lang.IllegalArgumentException("Fields cannot be left empty.")
             }
-            if (loginUiState.passwordSignUp !=
-                loginUiState.confirmPasswordSignUp
+            if (loginUIState.passwordSignUp !=
+                loginUIState.confirmPasswordSignUp
             ) {
                 throw java.lang.IllegalArgumentException(
                     "Passwords do not match"
                 )
             }
             // No errors occurred, update signUpError state.
-            loginUiState = loginUiState.copy(signUpError = null)
+            loginUIState = loginUIState.copy(signUpError = null)
             // FirebaseAuth API call
             authRepository.createUser(
-                loginUiState.emailSignUp,
-                loginUiState.passwordSignUp
+                loginUIState.emailSignUp,
+                loginUIState.passwordSignUp
             ) { isSuccessful ->
                 if (isSuccessful) {
                     Toast.makeText(
@@ -101,41 +100,41 @@ class LoginViewModel(
                     ).show()
                     // Firebase RealtimeDB API call
                     userRepository.addUser(
-                        loginUiState.nameSignUp,
-                        loginUiState.locationSignUp,
-                        loginUiState.departmentSignUp,
-                        loginUiState.jobTitleSignUp
+                        loginUIState.nameSignUp,
+                        loginUIState.locationSignUp,
+                        loginUIState.departmentSignUp,
+                        loginUIState.jobTitleSignUp
                     )
-                    loginUiState = loginUiState.copy(isSuccessLogin = true)
+                    loginUIState = loginUIState.copy(isSuccessLogin = true)
                 } else {
                     Toast.makeText(
                         context,
                         "Failed login.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = false)
+                    loginUIState = loginUIState.copy(isSuccessLogin = false)
                 }
             }
         } catch (e: Exception) {
-            loginUiState = loginUiState.copy(signUpError = e.localizedMessage)
+            loginUIState = loginUIState.copy(signUpError = e.localizedMessage)
             e.printStackTrace()
         } finally {
-            loginUiState = loginUiState.copy(isLoading = false)
+            loginUIState = loginUIState.copy(isLoading = false)
         }
     }
 
     fun loginUser(context: Context) = viewModelScope.launch {
         try {
-            loginUiState = loginUiState.copy(isLoading = true)
+            loginUIState = loginUIState.copy(isLoading = true)
             if (!validateLoginForm()) {
                 throw java.lang.IllegalArgumentException("email and password cannot be empty.")
             }
             // No errors occurred, update signUpError state.
-            loginUiState = loginUiState.copy(loginError = null)
+            loginUIState = loginUIState.copy(loginError = null)
             // FirebaseAuth API call
             authRepository.login(
-                loginUiState.email,
-                loginUiState.password
+                loginUIState.email,
+                loginUIState.password
             ) { isSuccessful ->
                 if (isSuccessful) {
                     Toast.makeText(
@@ -143,26 +142,26 @@ class LoginViewModel(
                         "Successful login.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = true)
+                    loginUIState = loginUIState.copy(isSuccessLogin = true)
                 } else {
                     Toast.makeText(
                         context,
                         "Failed login.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = false)
+                    loginUIState = loginUIState.copy(isSuccessLogin = false)
                 }
             }
         } catch (e: Exception) {
-            loginUiState = loginUiState.copy(loginError = e.localizedMessage)
+            loginUIState = loginUIState.copy(loginError = e.localizedMessage)
             e.printStackTrace()
         } finally {
-            loginUiState = loginUiState.copy(isLoading = false)
+            loginUIState = loginUIState.copy(isLoading = false)
         }
     }
 }
 
-data class LoginUiState(
+data class LoginUIState(
     val email: String = "",
     val password: String = "",
     val emailSignUp: String = "",

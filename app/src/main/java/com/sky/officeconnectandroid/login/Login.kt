@@ -29,10 +29,9 @@ fun LoginScreen(
     onNavToHomePage: () -> Unit,
     onNavToSignUpPage: () -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
-    val isError = loginUiState?.loginError != null
+    val loginUIState = loginViewModel?.loginUIState
+    val isError = loginUIState?.loginError != null
     val context = LocalContext.current
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +90,7 @@ fun LoginScreen(
             )
             if (isError) {
                 Text(
-                    text = loginUiState?.loginError ?: "unknown error",
+                    text = loginUIState?.loginError ?: "unknown error",
                     color = Color.Red
                 )
             }
@@ -180,7 +179,7 @@ fun LoginScreen(
                     Text(text = "Sign Up")
                 }
             }
-            if (loginUiState?.isLoading == true) {
+            if (loginUIState?.isLoading == true) {
                 CircularProgressIndicator()
             }
             LaunchedEffect(key1 = loginViewModel?.hasUser) {
@@ -198,7 +197,7 @@ fun SignUpScreen(
     onNavToHomePage: () -> Unit,
     onNavToLoginPage: () -> Unit,
 ) {
-    val loginUiState = loginViewModel?.loginUiState
+    val loginUiState = loginViewModel?.loginUIState
     val isError = loginUiState?.signUpError != null
     val context = LocalContext.current
 

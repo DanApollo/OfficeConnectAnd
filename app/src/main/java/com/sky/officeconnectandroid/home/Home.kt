@@ -12,7 +12,8 @@ import com.google.firebase.ktx.Firebase
 
 @Composable
 fun Home(
-    onNavToLoginPage: () -> Unit
+    onNavToLoginPage: () -> Unit,
+    onNavToMyProfile: () -> Unit
 ) {
     // Temporary home screen
     Column(
@@ -20,6 +21,9 @@ fun Home(
             .fillMaxSize()
     ) {
         Text(text = "This is the Home Screen.")
+        Button(onClick = { onNavToMyProfile.invoke() }) {
+            Text(text = "My Profile.")
+        }
         Button(onClick = {
             Firebase.auth.signOut()
             onNavToLoginPage.invoke()
@@ -32,5 +36,5 @@ fun Home(
 @Composable
 @Preview(showSystemUi = true)
 fun HomePreview() {
-    Home(onNavToLoginPage = {})
+    Home(onNavToLoginPage = {}, onNavToMyProfile = {})
 }
