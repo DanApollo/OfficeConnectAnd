@@ -31,19 +31,41 @@ class MyProfileViewModel(
     }
 
     fun onNameChange(name: String) {
-        myProfileUIState = myProfileUIState.copy(name = name)
+        myProfileUIState = myProfileUIState.copy(editableName = name)
     }
 
     fun onJobTitleChange(jobTitle: String) {
-        myProfileUIState = myProfileUIState.copy(jobTitle = jobTitle)
+        myProfileUIState = myProfileUIState.copy(editableJobTitle = jobTitle)
     }
 
     fun onLocationChange(location: String) {
-        myProfileUIState = myProfileUIState.copy(location = location)
+        myProfileUIState = myProfileUIState.copy(editableLocation = location)
     }
 
     fun onDepartmentChange(department: String) {
-        myProfileUIState = myProfileUIState.copy(department = department)
+        myProfileUIState = myProfileUIState.copy(editableDepartment = department)
+    }
+
+    fun onEditableToggle() {
+        if (!myProfileUIState.editable) {
+            myProfileUIState = myProfileUIState.copy(
+                editableName = myProfileUIState.name,
+                editableJobTitle = myProfileUIState.jobTitle,
+                editableLocation = myProfileUIState.location,
+                editableDepartment = myProfileUIState.department,
+            )
+        }
+        myProfileUIState = myProfileUIState.copy(editable = !myProfileUIState.editable)
+    }
+
+    fun onUpdateUser() {
+        val user = User(
+            myProfileUIState.editableName,
+            myProfileUIState.editableLocation,
+            myProfileUIState.editableDepartment,
+            myProfileUIState.editableJobTitle
+        )
+        userRepository.updateUser(userID, user)
     }
 }
 
@@ -52,5 +74,9 @@ data class MyProfileUIState(
     val jobTitle: String = "",
     val location: String = "",
     val department: String = "",
+    val editableName: String = "",
+    val editableJobTitle: String = "",
+    val editableLocation: String = "",
+    val editableDepartment: String = "",
     val editable: Boolean = false
 )

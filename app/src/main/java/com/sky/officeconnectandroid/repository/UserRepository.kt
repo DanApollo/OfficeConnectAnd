@@ -1,5 +1,6 @@
 package com.sky.officeconnectandroid.repository
 
+import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,6 +29,7 @@ class UserRepository {
         val userListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
+                Log.d("dataChange", "changed")
                 updateUser(user)
             }
 
@@ -35,5 +37,14 @@ class UserRepository {
             }
         }
         database.child(USERS_REF).child(userID).addValueEventListener(userListener)
+    }
+
+    fun updateUser(userID: String, user: User) {
+        val userValues = user.toMap()
+
+        val childUpdates = hashMapOf<String, Any>(
+            "/users/$userID" to userValues
+        )
+        database.updateChildren(childUpdates)
     }
 }
