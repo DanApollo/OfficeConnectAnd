@@ -15,10 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -123,7 +120,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 4.dp),
+                    .padding(bottom = 10.dp),
                 value = loginUiState?.password ?: "",
                 onValueChange = { loginViewModel?.onPasswordChange(it) },
                 leadingIcon = {
@@ -144,10 +141,33 @@ fun LoginScreen(
                 onClick = { loginViewModel?.loginUser(context) },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(height = 40.dp)
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Blue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
-                Text(text = "Continue")
+                val colorStops = arrayOf(
+                    0f to Color(255, 255, 255).copy(0.0f),
+                    0.5f to Color(255, 255, 255).copy(0.15f),
+                    0.51f to Color.Transparent,
+                )
+                Box(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(colorStops = colorStops),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .fillMaxSize()
+                ){
+                    Text(
+                        text = "Continue",
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+                    )
+                }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -367,8 +387,37 @@ fun SignUpScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 isError = isError
             )
-            Button(onClick = { loginViewModel?.createUser(context) }) {
-                Text(text = "Sign Up")
+            Button(
+                onClick = { loginViewModel?.createUser(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = 40.dp)
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Blue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                val colorStops = arrayOf(
+                    0f to Color(255, 255, 255).copy(0.0f),
+                    0.5f to Color(255, 255, 255).copy(0.15f),
+                    0.51f to Color.Transparent,
+                )
+                Box(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(colorStops = colorStops),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .fillMaxSize()
+                ){
+                    Text(
+                        text = "Sign Up",
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+                    )
+                }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
