@@ -1,18 +1,12 @@
 package com.sky.officeconnectandroid.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
-import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
 import kotlinx.coroutines.launch

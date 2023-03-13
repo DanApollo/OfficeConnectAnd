@@ -35,7 +35,6 @@ fun LoginScreen(
     val loginUIState = loginViewModel?.loginUIState
     val isError = loginUIState?.loginError != null
     val context = LocalContext.current
-
     Box(
         modifier = Modifier
             .fillMaxSize()

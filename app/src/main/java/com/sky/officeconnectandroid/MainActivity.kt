@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sky.officeconnectandroid.login.LoginViewModel
+import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
 import com.sky.officeconnectandroid.navigation.Navigation
 import com.sky.officeconnectandroid.ui.theme.OfficeConnectAndTheme
 
@@ -20,13 +21,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
+            val myProfileViewModel = viewModel(modelClass = MyProfileViewModel::class.java)
             OfficeConnectAndTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Navigation(loginViewModel = loginViewModel)
+                    Navigation(loginViewModel = loginViewModel, myProfileViewModel = myProfileViewModel)
                 }
             }
         }

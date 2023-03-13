@@ -13,7 +13,7 @@ fun MyProfile(
     onNavToHomePage: () -> Unit
 ) {
     val myProfileUIState = myProfileViewModel?.myProfileUIState
-
+    myProfileViewModel?.updateUserData()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -22,13 +22,13 @@ fun MyProfile(
             Text(text = "Back")
         }
         Text(text = "Name:")
-        Text(text = myProfileUIState?.name.toString())
+        Text(text = myProfileUIState?.name ?: "")
         Text(text = "Job title:")
-        Text(text = myProfileUIState?.jobTitle.toString())
+        Text(text = myProfileUIState?.jobTitle ?: "")
         Text(text = "Location:")
-        Text(text = myProfileUIState?.location.toString())
+        Text(text = myProfileUIState?.location ?: "")
         Text(text = "Department")
-        Text(text = myProfileUIState?.department.toString())
+        Text(text = myProfileUIState?.department ?: "")
     }
 }
 

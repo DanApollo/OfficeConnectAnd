@@ -11,11 +11,13 @@ import com.sky.officeconnectandroid.login.LoginScreen
 import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.login.SignUpScreen
 import com.sky.officeconnectandroid.myprofile.MyProfile
+import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController = rememberNavController(),
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    myProfileViewModel: MyProfileViewModel
 ) {
     NavHost(
         navController = navController,
@@ -84,7 +86,8 @@ fun Navigation(
                     navController.navigate(Screen.HomeScreen.route) {
                         launchSingleTop = true
                     }
-                }
+                },
+                myProfileViewModel = myProfileViewModel
             )
         }
     }
