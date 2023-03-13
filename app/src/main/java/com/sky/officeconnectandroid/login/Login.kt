@@ -15,10 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -66,8 +63,7 @@ fun LoginScreen(
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(28.dp)
-                )
-                .padding(top = 10.dp),
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -90,6 +86,7 @@ fun LoginScreen(
                             drawRect(brush, blendMode = BlendMode.SrcAtop)
                         }
                     }
+                    .padding(vertical = 10.dp)
             )
             if (isError) {
                 Text(
@@ -97,11 +94,13 @@ fun LoginScreen(
                     color = Color.Red
                 )
             }
+            Text(text = "Sign in with your Office Connect account.")
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                value = loginUIState?.email ?: "",
+                    .padding(horizontal = 16.dp)
+                    .padding(vertical = 4.dp),
+                value = loginUiState?.email ?: "",
                 onValueChange = { loginViewModel?.onEmailChange(it) },
                 leadingIcon = {
                     Icon(
@@ -119,8 +118,9 @@ fun LoginScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                value = loginUIState?.password ?: "",
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 10.dp),
+                value = loginUiState?.password ?: "",
                 onValueChange = { loginViewModel?.onPasswordChange(it) },
                 leadingIcon = {
                     Icon(
@@ -136,8 +136,37 @@ fun LoginScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 isError = isError
             )
-            Button(onClick = { loginViewModel?.loginUser(context) }) {
-                Text(text = "Sign In")
+            Button(
+                onClick = { loginViewModel?.loginUser(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = 40.dp)
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Blue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                val colorStops = arrayOf(
+                    0f to Color(255, 255, 255).copy(0.0f),
+                    0.5f to Color(255, 255, 255).copy(0.15f),
+                    0.51f to Color.Transparent,
+                )
+                Box(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(colorStops = colorStops),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .fillMaxSize()
+                ){
+                    Text(
+                        text = "Continue",
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+                    )
+                }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -357,8 +386,37 @@ fun SignUpScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 isError = isError
             )
-            Button(onClick = { loginViewModel?.createUser(context) }) {
-                Text(text = "Sign Up")
+            Button(
+                onClick = { loginViewModel?.createUser(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = 40.dp)
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Blue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                val colorStops = arrayOf(
+                    0f to Color(255, 255, 255).copy(0.0f),
+                    0.5f to Color(255, 255, 255).copy(0.15f),
+                    0.51f to Color.Transparent,
+                )
+                Box(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(colorStops = colorStops),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .fillMaxSize()
+                ){
+                    Text(
+                        text = "Sign Up",
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+                    )
+                }
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
