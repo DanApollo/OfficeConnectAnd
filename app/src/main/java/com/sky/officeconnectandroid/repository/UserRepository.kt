@@ -11,8 +11,6 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.User
 
-const val USERS_REF = "users"
-
 class UserRepository {
 
     fun getUserId(): String = Firebase.auth.currentUser?.uid.orEmpty()
@@ -22,21 +20,20 @@ class UserRepository {
     fun addUser(name: String, location: String, department: String, jobTitle: String) {
         val user = User(name, location, department, jobTitle)
 
-        database.child(USERS_REF).child(getUserId()).setValue(user)
+        database.child("users").child(getUserId()).setValue(user)
     }
 
     fun setUserEventListener(userID: String, updateUser: (input: User?) -> Unit) {
         val userListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
-                Log.d("dataChange", "changed")
                 updateUser(user)
             }
 
             override fun onCancelled(error: DatabaseError) {
             }
         }
-        database.child(USERS_REF).child(userID).addValueEventListener(userListener)
+        database.child("users").child(userID).addValueEventListener(userListener)
     }
 
     fun updateUser(userID: String, user: User) {

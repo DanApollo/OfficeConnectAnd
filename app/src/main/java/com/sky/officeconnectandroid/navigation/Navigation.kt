@@ -12,12 +12,15 @@ import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.login.SignUpScreen
 import com.sky.officeconnectandroid.myprofile.MyProfile
 import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
+import com.sky.officeconnectandroid.newofficeday.NewOfficeDay
+import com.sky.officeconnectandroid.newofficeday.NewOfficeDayViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
-    myProfileViewModel: MyProfileViewModel
+    myProfileViewModel: MyProfileViewModel,
+    newOfficeDayViewModel: NewOfficeDayViewModel
 ) {
     NavHost(
         navController = navController,
@@ -74,7 +77,12 @@ fun Navigation(
                     }
                 },
                 onNavToMyProfile = {
-                    navController.navigate((Screen.MyProfile.route)) {
+                    navController.navigate(Screen.MyProfile.route) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavToNewOfficeDay = {
+                    navController.navigate(Screen.NewOfficeDay.route) {
                         launchSingleTop = true
                     }
                 }
@@ -88,6 +96,16 @@ fun Navigation(
                     }
                 },
                 myProfileViewModel = myProfileViewModel
+            )
+        }
+        composable(route = Screen.NewOfficeDay.route) {
+            NewOfficeDay(
+                onNavToHomePage = {
+                    navController.navigate(Screen.HomeScreen.route) {
+                        launchSingleTop = true
+                    }
+                },
+                newOfficeDayViewModel = newOfficeDayViewModel
             )
         }
     }

@@ -12,7 +12,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MyProfile(
-    myProfileViewModel: MyProfileViewModel? = null, onNavToHomePage: () -> Unit
+    myProfileViewModel: MyProfileViewModel? = null,
+    onNavToHomePage: () -> Unit
 ) {
     val myProfileUIState = myProfileViewModel?.myProfileUIState
     if (!myProfileUIState?.editable!!) {
