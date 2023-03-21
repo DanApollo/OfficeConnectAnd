@@ -36,7 +36,7 @@ class NewOfficeDayViewModel(
     }
 
     fun createAppointment() {
-        appointmentRepository.addAppointment(
+        appointmentRepository.updateAppointment(
             newOfficeDayUIState.date,
             newOfficeDayUIState.location,
             newOfficeDayUIState.department,

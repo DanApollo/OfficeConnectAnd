@@ -13,7 +13,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun MyProfile(
     myProfileViewModel: MyProfileViewModel? = null,
-    onNavToHomePage: () -> Unit
+    onNavToHomePage: () -> Unit,
+    onNavToMyOfficeDays: () -> Unit
 ) {
     val myProfileUIState = myProfileViewModel?.myProfileUIState
     if (!myProfileUIState?.editable!!) {
@@ -28,6 +29,9 @@ fun MyProfile(
                     Text(text = "Back")
                 }
                 Text(text = "My Profile")
+                Button(onClick = { myProfileViewModel.onEditableToggle() }) {
+                    Text(text = "Edit")
+                }
             } else {
                 Button(onClick = { myProfileViewModel.onEditableToggle() }) {
                     Text(text = "Cancel")
@@ -80,8 +84,8 @@ fun MyProfile(
             }
         }
         if (!myProfileUIState.editable) {
-            Button(onClick = { myProfileViewModel.onEditableToggle() }) {
-                Text(text = "Edit")
+            Button(onClick = { onNavToMyOfficeDays.invoke() }) {
+                Text(text = "My Office Days")
             }
         }
     }

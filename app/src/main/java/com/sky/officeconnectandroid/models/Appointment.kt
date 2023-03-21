@@ -1,7 +1,8 @@
 package com.sky.officeconnectandroid.models
 
-import java.util.Date
+import java.time.LocalDate
 
 data class Appointment(
-    val date: Date,
+    val date: LocalDate,
+    val location: String = "",
 )

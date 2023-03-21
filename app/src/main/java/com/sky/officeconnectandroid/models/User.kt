@@ -5,13 +5,15 @@ data class User(
     val location:String = "",
     val department:String = "",
     val jobTitle:String = "",
+    val appointments: MutableMap<String, String> = HashMap()
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "name" to name,
             "location" to location,
             "department" to department,
-            "jobTitle" to jobTitle
+            "jobTitle" to jobTitle,
+            "appointments" to appointments
         )
     }
 }

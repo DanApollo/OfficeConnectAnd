@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object HomeScreen : Screen("home_screen")
     object MyProfile : Screen("my_profile")
     object NewOfficeDay : Screen("new_office_day")
+    object MyOfficeDays : Screen("my_office_days")
 }
