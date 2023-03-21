@@ -20,13 +20,17 @@ fun MyOfficeDays(
             .fillMaxSize()
     ) {
         myOfficeDaysViewModel?.updateAppointmentsData()
+        myOfficeDaysViewModel?.updateUserData()
         Button(onClick = { onNavToMyProfile.invoke() }) {
             Text(text = "Back")
         }
         Text(text = "My Office Days")
         if (myOfficeDaysUIState?.appointments?.size!! > 0) {
             for (i in myOfficeDaysUIState?.appointments!!) {
-                AppointmentCard(date = i.date.toString(), location = i.location)
+                AppointmentCard(
+                    name = myOfficeDaysUIState.name,
+                    date = i.date,
+                    location = i.location)
             }
         }
 
