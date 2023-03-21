@@ -6,9 +6,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.sky.officeconnectandroid.components.DateSelector
 
 @Composable
 fun Home(
@@ -16,6 +18,7 @@ fun Home(
     onNavToMyProfile: () -> Unit,
     onNavToNewOfficeDay: () -> Unit
 ) {
+    val context = LocalContext.current
     // Temporary home screen
     Column(
         Modifier

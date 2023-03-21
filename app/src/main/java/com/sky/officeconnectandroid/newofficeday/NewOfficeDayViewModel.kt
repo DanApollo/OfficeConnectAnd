@@ -36,12 +36,14 @@ class NewOfficeDayViewModel(
     }
 
     fun createAppointment() {
-        appointmentRepository.updateAppointment(
-            newOfficeDayUIState.date,
-            newOfficeDayUIState.location,
-            newOfficeDayUIState.department,
-            userID
-        )
+        if (newOfficeDayUIState.date.isNotBlank()){
+            appointmentRepository.updateAppointment(
+                newOfficeDayUIState.date,
+                newOfficeDayUIState.location,
+                newOfficeDayUIState.department,
+                userID
+            )
+        }
     }
 }
 data class NewOfficeDayUIState(

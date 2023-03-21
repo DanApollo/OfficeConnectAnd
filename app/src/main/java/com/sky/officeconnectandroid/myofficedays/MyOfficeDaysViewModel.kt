@@ -31,7 +31,6 @@ class MyOfficeDaysViewModel(
         )
     }
     private fun updateUserState(input: User?) {
-        Log.d("testObj", input?.appointments.toString())
         myOfficeDaysUIState = myOfficeDaysUIState.copy(
             name = input?.name ?: ""
         )
