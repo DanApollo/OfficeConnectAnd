@@ -1,5 +1,6 @@
 package com.sky.officeconnectandroid.myprofile
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,6 +20,7 @@ class MyProfileViewModel(
         private set
 
     private fun updateUserState(input: User?) {
+        Log.d("testObj", input?.appointments.toString())
         myProfileUIState = myProfileUIState.copy(
             name = input?.name ?: "",
             jobTitle = input?.jobTitle ?: "",

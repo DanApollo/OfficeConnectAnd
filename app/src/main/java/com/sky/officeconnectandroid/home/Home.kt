@@ -13,7 +13,8 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun Home(
     onNavToLoginPage: () -> Unit,
-    onNavToMyProfile: () -> Unit
+    onNavToMyProfile: () -> Unit,
+    onNavToNewOfficeDay: () -> Unit
 ) {
     // Temporary home screen
     Column(
@@ -22,7 +23,10 @@ fun Home(
     ) {
         Text(text = "This is the Home Screen.")
         Button(onClick = { onNavToMyProfile.invoke() }) {
-            Text(text = "My Profile.")
+            Text(text = "My Profile")
+        }
+        Button(onClick = { onNavToNewOfficeDay.invoke() }) {
+            Text(text = "Book a day")
         }
         Button(onClick = {
             Firebase.auth.signOut()
@@ -36,5 +40,5 @@ fun Home(
 @Composable
 @Preview(showSystemUi = true)
 fun HomePreview() {
-    Home(onNavToLoginPage = {}, onNavToMyProfile = {})
+    Home(onNavToLoginPage = {}, onNavToMyProfile = {}, onNavToNewOfficeDay = {})
 }

@@ -100,7 +100,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .padding(vertical = 4.dp),
-                value = loginUiState?.email ?: "",
+                value = loginUIState?.email ?: "",
                 onValueChange = { loginViewModel?.onEmailChange(it) },
                 leadingIcon = {
                     Icon(
@@ -120,7 +120,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 10.dp),
-                value = loginUiState?.password ?: "",
+                value = loginUIState?.password ?: "",
                 onValueChange = { loginViewModel?.onPasswordChange(it) },
                 leadingIcon = {
                     Icon(

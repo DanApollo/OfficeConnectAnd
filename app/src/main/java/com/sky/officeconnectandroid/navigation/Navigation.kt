@@ -10,14 +10,20 @@ import com.sky.officeconnectandroid.home.Home
 import com.sky.officeconnectandroid.login.LoginScreen
 import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.login.SignUpScreen
+import com.sky.officeconnectandroid.myofficedays.MyOfficeDays
+import com.sky.officeconnectandroid.myofficedays.MyOfficeDaysViewModel
 import com.sky.officeconnectandroid.myprofile.MyProfile
 import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
+import com.sky.officeconnectandroid.newofficeday.NewOfficeDay
+import com.sky.officeconnectandroid.newofficeday.NewOfficeDayViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
-    myProfileViewModel: MyProfileViewModel
+    myProfileViewModel: MyProfileViewModel,
+    newOfficeDayViewModel: NewOfficeDayViewModel,
+    myOfficeDaysViewModel: MyOfficeDaysViewModel
 ) {
     NavHost(
         navController = navController,
@@ -74,7 +80,12 @@ fun Navigation(
                     }
                 },
                 onNavToMyProfile = {
-                    navController.navigate((Screen.MyProfile.route)) {
+                    navController.navigate(Screen.MyProfile.route) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavToNewOfficeDay = {
+                    navController.navigate(Screen.NewOfficeDay.route) {
                         launchSingleTop = true
                     }
                 }
@@ -87,7 +98,32 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 },
+                onNavToMyOfficeDays = {
+                    navController.navigate(Screen.MyOfficeDays.route) {
+                        launchSingleTop = true
+                    }
+                },
                 myProfileViewModel = myProfileViewModel
+            )
+        }
+        composable(route = Screen.NewOfficeDay.route) {
+            NewOfficeDay(
+                onNavToHomePage = {
+                    navController.navigate(Screen.HomeScreen.route) {
+                        launchSingleTop = true
+                    }
+                },
+                newOfficeDayViewModel = newOfficeDayViewModel
+            )
+        }
+        composable(route = Screen.MyOfficeDays.route) {
+            MyOfficeDays(
+                onNavToMyProfile = {
+                    navController.navigate(Screen.MyProfile.route) {
+                        launchSingleTop = true
+                    }
+                },
+                myOfficeDaysViewModel = myOfficeDaysViewModel
             )
         }
     }
