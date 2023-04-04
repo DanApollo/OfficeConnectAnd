@@ -12,10 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import java.time.LocalDate
 import java.util.Date
 
 @Composable
-fun DateSelector(context: Context, dateSelect: (date: String) -> Unit) {
+fun DateSelector(context: Context, dateSelect: (date: LocalDate) -> Unit) {
     val year: Int
     val month: Int
     val day: Int
@@ -32,7 +33,8 @@ fun DateSelector(context: Context, dateSelect: (date: String) -> Unit) {
         {
             _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
             date.value = "$year-${if (month < 9) "0${month+1}" else "${month+1}"}-${if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"}"
-            dateSelect(date.value)
+            val newDate = LocalDate.parse(date.value)
+            dateSelect(newDate)
         }, year, month, day
     )
     Column(modifier = Modifier.fillMaxWidth()) {

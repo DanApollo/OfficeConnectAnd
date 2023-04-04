@@ -8,6 +8,7 @@ import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AppointmentRepository
 import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
+import java.time.LocalDate
 
 class NewOfficeDayViewModel(
     private val authRepository: AuthRepository = AuthRepository(),
@@ -31,14 +32,14 @@ class NewOfficeDayViewModel(
     var newOfficeDayUIState by mutableStateOf(NewOfficeDayUIState())
         private set
 
-    fun onDateChange(date: String) {
+    fun onDateChange(date: LocalDate) {
         newOfficeDayUIState = newOfficeDayUIState.copy(date = date)
     }
 
     fun createAppointment() {
-        if (newOfficeDayUIState.date.isNotBlank()){
+        if (newOfficeDayUIState.date !== null){
             appointmentRepository.updateAppointment(
-                newOfficeDayUIState.date,
+                newOfficeDayUIState.date!!,
                 newOfficeDayUIState.location,
                 newOfficeDayUIState.department,
                 userID
@@ -47,7 +48,7 @@ class NewOfficeDayViewModel(
     }
 }
 data class NewOfficeDayUIState(
-    val date: String = "",
+    val date: LocalDate? = null,
     val location: String = "",
     val department: String = "",
 )

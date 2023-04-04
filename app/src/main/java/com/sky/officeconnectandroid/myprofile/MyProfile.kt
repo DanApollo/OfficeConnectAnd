@@ -9,12 +9,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun MyProfile(
     myProfileViewModel: MyProfileViewModel? = null,
     onNavToHomePage: () -> Unit,
-    onNavToMyOfficeDays: () -> Unit
+    onNavToMyOfficeDays: () -> Unit,
+    onNavToLoginPage: () -> Unit
 ) {
     val myProfileUIState = myProfileViewModel?.myProfileUIState
     if (!myProfileUIState?.editable!!) {
@@ -86,6 +89,12 @@ fun MyProfile(
         if (!myProfileUIState.editable) {
             Button(onClick = { onNavToMyOfficeDays.invoke() }) {
                 Text(text = "My Office Days")
+            }
+            Button(onClick = {
+                Firebase.auth.signOut()
+                onNavToLoginPage.invoke()
+            }) {
+                Text(text = "Log Out")
             }
         }
     }

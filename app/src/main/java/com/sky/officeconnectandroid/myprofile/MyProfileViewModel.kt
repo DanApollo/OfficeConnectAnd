@@ -20,7 +20,6 @@ class MyProfileViewModel(
         private set
 
     private fun updateUserState(input: User?) {
-        Log.d("testObj", input?.appointments.toString())
         myProfileUIState = myProfileUIState.copy(
             name = input?.name ?: "",
             jobTitle = input?.jobTitle ?: "",

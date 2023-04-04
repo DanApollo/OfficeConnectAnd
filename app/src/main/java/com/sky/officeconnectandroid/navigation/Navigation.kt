@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sky.officeconnectandroid.animatedsplash.AnimatedSplash
 import com.sky.officeconnectandroid.home.Home
+import com.sky.officeconnectandroid.home.HomeViewModel
 import com.sky.officeconnectandroid.login.LoginScreen
 import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.login.SignUpScreen
@@ -23,7 +24,8 @@ fun Navigation(
     loginViewModel: LoginViewModel,
     myProfileViewModel: MyProfileViewModel,
     newOfficeDayViewModel: NewOfficeDayViewModel,
-    myOfficeDaysViewModel: MyOfficeDaysViewModel
+    myOfficeDaysViewModel: MyOfficeDaysViewModel,
+    homeViewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
@@ -73,12 +75,6 @@ fun Navigation(
         }
         composable(route = Screen.HomeScreen.route) {
             Home(
-                onNavToLoginPage = {
-                    navController.navigate(Screen.LoginScreen.route) {
-                        launchSingleTop = true
-                        popUpTo(route = Screen.HomeScreen.route) { inclusive = true }
-                    }
-                },
                 onNavToMyProfile = {
                     navController.navigate(Screen.MyProfile.route) {
                         launchSingleTop = true
@@ -88,11 +84,18 @@ fun Navigation(
                     navController.navigate(Screen.NewOfficeDay.route) {
                         launchSingleTop = true
                     }
-                }
+                },
+                homeViewModel = homeViewModel
             )
         }
         composable(route = Screen.MyProfile.route) {
             MyProfile(
+                onNavToLoginPage = {
+                    navController.navigate(Screen.LoginScreen.route) {
+                        launchSingleTop = true
+                        popUpTo(route = Screen.HomeScreen.route) { inclusive = true }
+                    }
+                },
                 onNavToHomePage = {
                     navController.navigate(Screen.HomeScreen.route) {
                         launchSingleTop = true
