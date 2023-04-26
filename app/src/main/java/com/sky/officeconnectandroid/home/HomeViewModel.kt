@@ -21,15 +21,14 @@ class HomeViewModel (
 
     var homeUIState by mutableStateOf(HomeUIState())
         private set
+
     fun testFun (input: List<String>) {
         val app: MutableList<User> = mutableListOf()
         input.map {
+//            Log.d("testLog", "pass: $it")
             userRepository.setUserEventListener(it,
-                fun(i: User?) { app.add(i?: User()); homeUIState = homeUIState.copy( appointments = app) })
+                fun(i: User?) { app.add(i?: User()); homeUIState = homeUIState.copy( appointments = app); Log.d("testLog", "${homeUIState.appointments}");})
         }
-//        homeUIState = homeUIState.copy(
-//            appointments = app
-//        )
     }
 
     fun updateAppointmentsListState(date: LocalDate) {
@@ -54,6 +53,23 @@ class HomeViewModel (
     fun updateUserData() {
         userRepository.setUserEventListener(userID, ::updateUserState)
     }
+
+    fun createAppointment() {
+        if (homeUIState.date !== null){
+            appointmentRepository.updateAppointment(
+                homeUIState.date!!,
+                homeUIState.location,
+                homeUIState.department,
+                userID
+            )
+        }
+    }
+
+    fun setDate(date: LocalDate) {
+        homeUIState = homeUIState.copy(
+            date = date
+        )
+    }
 }
 
 data class HomeUIState(
@@ -61,4 +77,5 @@ data class HomeUIState(
     val userIDs: List<String> = listOf(),
     val location: String = "Osterley",
     val department: String = "",
+    val date: LocalDate = LocalDate.now()
 )

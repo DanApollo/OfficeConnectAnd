@@ -1,6 +1,7 @@
 package com.sky.officeconnectandroid.components
 
 import android.graphics.Paint
+import android.util.Log
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -24,16 +25,16 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.random.Random
 
-private const val CALENDAR_ROWS = 5
+private const val CALENDAR_ROWS = 6
 private const val CALENDAR_COLUMNS = 7
 
 @Composable
 fun Calendar(
+    bookingDate: LocalDate,
     modifier: Modifier = Modifier,
     onDayClick:(LocalDate)->Unit,
     strokeWidth:Float = 15f,
 ) {
-
     var selectedDate by remember {
         mutableStateOf(LocalDate.now())
     }
@@ -52,6 +53,28 @@ fun Calendar(
 
     val scope = rememberCoroutineScope()
 
+    fun initPosition () {
+        val day = selectedDate.dayOfMonth
+        val dayOffset = day + selectedDate.withDayOfMonth(1).dayOfWeek.value - 1
+        var div: Int
+        var mod: Int
+        if (dayOffset% CALENDAR_COLUMNS == 0) {
+            div = ((dayOffset-1)/ CALENDAR_COLUMNS)
+            mod = 7
+        } else {
+            div = dayOffset/ CALENDAR_COLUMNS
+            mod = dayOffset% CALENDAR_COLUMNS
+        }
+        val column = ((div) + 0.5f)/ CALENDAR_ROWS * canvasSize.height
+        val row = ((mod -0.5f)/ CALENDAR_COLUMNS) * canvasSize.width
+        clickAnimationOffset = Offset(row,column)
+        scope.launch {
+            animate(0f, 225f, animationSpec = tween(300)) { value, _ ->
+                animationRadius = value
+            }
+        }
+//        return Offset(row,column)
+    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -60,7 +83,19 @@ fun Calendar(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Button(onClick = { selectedDate = selectedDate.minusMonths(1) }) {
+            Button(onClick = {
+                selectedDate = selectedDate.minusMonths(1)
+                if(selectedDate.month == bookingDate.month ){
+                    initPosition()
+                } else{
+                    scope.launch {
+                        animate(0f, 0f) { value, _ ->
+                            animationRadius = value
+                        }
+                    }
+                }
+
+            }) {
                 Text(text = "<")
             }
             Text(
@@ -69,9 +104,37 @@ fun Calendar(
                 color = Color.White,
                 fontSize = 40.sp
             )
-            Button(onClick = { selectedDate = selectedDate.plusMonths(1) }) {
+            Button(onClick = {
+                selectedDate = selectedDate.plusMonths(1)
+                if(selectedDate.month == bookingDate.month ){
+                    initPosition()
+                } else {
+                    scope.launch {
+                        animate(0f, 0f) { value, _ ->
+                        animationRadius = value
+                        }
+                    }
+                }
+
+            }) {
                 Text(text = ">")
             }
+            Button(onClick = { initPosition() }) {
+                Text(text = "Test")
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            Arrangement.SpaceAround
+        ) {
+            Text(text = "Mon")
+            Text(text = "Tue")
+            Text(text = "Wed")
+            Text(text = "Thu")
+            Text(text = "Fri")
+            Text(text = "Sat")
+            Text(text = "Sun")
         }
 
         Canvas(
@@ -80,12 +143,17 @@ fun Calendar(
                 .pointerInput(true) {
                     detectTapGestures(
                         onTap = { offset ->
+                            Log.d("testLog", "$offset")
                             val column =
                                 (offset.x / canvasSize.width * CALENDAR_COLUMNS).toInt() + 1
                             val row = (offset.y / canvasSize.height * CALENDAR_ROWS).toInt() + 1
-                            val day = column + (row - 1) * CALENDAR_COLUMNS
-                            if (day <= selectedDate.lengthOfMonth()) {
-                                onDayClick(selectedDate.withDayOfMonth(day))
+                            val day =
+                                column + (row - 1) * CALENDAR_COLUMNS - (selectedDate.withDayOfMonth(
+                                    1
+                                ).dayOfWeek.value - 1)
+                            if (day > 0 && day <= selectedDate.lengthOfMonth()) {
+                                selectedDate = selectedDate.withDayOfMonth(day)
+                                onDayClick(selectedDate)
                                 clickAnimationOffset = offset
                                 scope.launch {
                                     animate(0f, 225f, animationSpec = tween(300)) { value, _ ->
@@ -151,8 +219,8 @@ fun Calendar(
             }
             val textHeight = 17.dp.toPx()
             for (i in List(selectedDate.lengthOfMonth()){ Random.nextInt()}.indices){
-                val textPositionX = xSteps * (i% CALENDAR_COLUMNS) + strokeWidth
-                val textPositionY = (i / CALENDAR_COLUMNS) * ySteps + textHeight + strokeWidth/2
+                val textPositionX = xSteps * ((i+selectedDate.withDayOfMonth(1).dayOfWeek.value-1)% CALENDAR_COLUMNS) + strokeWidth
+                val textPositionY = ((i+selectedDate.withDayOfMonth(1).dayOfWeek.value-1) / CALENDAR_COLUMNS) * ySteps + textHeight + strokeWidth/2
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         "${i+1}",

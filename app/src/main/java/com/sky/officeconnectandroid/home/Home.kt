@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sky.officeconnectandroid.components.AppointmentCard
 import com.sky.officeconnectandroid.components.Calendar
+import com.sky.officeconnectandroid.components.MyAppointmentCard
 import java.time.LocalDate
-import kotlin.math.exp
 
 @Composable
 fun Home(
@@ -28,24 +26,21 @@ fun Home(
     onNavToMyProfile: () -> Unit,
     onNavToNewOfficeDay: () -> Unit
 ) {
-    var homeUIState = homeViewModel?.homeUIState
+    val homeUIState = homeViewModel?.homeUIState
 
     val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize(),
     ){
         var opened by remember {
-            mutableStateOf<Boolean>(true)
+            mutableStateOf<Boolean>(false)
         }
+
         Column(
             Modifier
                 .fillMaxSize()
         ) {
             Button(onClick = { onNavToMyProfile.invoke() }) {
                 Text(text = "My Profile")
-            }
-
-            var clickedCalendarElem by remember {
-                mutableStateOf<LocalDate>(LocalDate.now())
             }
             var expanded by remember {
                 mutableStateOf(false)
@@ -56,23 +51,24 @@ fun Home(
                     .background(Color.Gray),
                 contentAlignment = Alignment.TopCenter
             ) {
-                Calendar(
-                    onDayClick = { day ->
-                        clickedCalendarElem = day
-                        homeViewModel?.updateAppointmentsListState(day)
-                    },
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth()
-                        .aspectRatio(1.3f)
-                )
+                    Calendar(
+                        bookingDate = homeUIState?.date ?: LocalDate.now(),
+                        onDayClick = { day ->
+                            homeViewModel?.setDate(day)
+                            homeViewModel?.updateAppointmentsListState(day)
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth()
+                            .aspectRatio(1.3f)
+                    )
             }
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
             ) {
                 Text(
-                    text = clickedCalendarElem.toString(),
+                    text = homeUIState?.date.toString(),
                     color = Color.Black,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 25.sp
@@ -88,7 +84,7 @@ fun Home(
                     DropdownMenuItem(
                         onClick = {
                             homeViewModel?.updateLocation("Osterley")
-                            homeViewModel?.updateAppointmentsListState(clickedCalendarElem)
+                            homeUIState?.date?.let { homeViewModel?.updateAppointmentsListState(it) }
                         }
                     ) {
                         Text(text = "Osterley")
@@ -96,14 +92,15 @@ fun Home(
                     DropdownMenuItem(
                         onClick = {
                             homeViewModel?.updateLocation("Leeds")
-                            homeViewModel?.updateAppointmentsListState(clickedCalendarElem)
+                            homeUIState?.date?.let { homeViewModel?.updateAppointmentsListState(it) }
                         }
                     ) {
                         Text(text = "Leeds")
                     }
                 }
-                Button(onClick = { onNavToNewOfficeDay.invoke() }) {
+                Button(onClick = { opened = true }) {
                     Text(text = "Book a day")
+                    Log.d("testLog", "$homeUIState")
                 }
             }
 
@@ -113,14 +110,29 @@ fun Home(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(homeUIState?.appointments?.size!!) { i ->
-                    AppointmentCard(name = homeUIState.appointments[i].name, date = "", location = "")
+                    MyAppointmentCard(name = homeUIState.appointments[i].name, jobTitle = homeUIState.appointments[i].jobTitle, department = homeUIState.appointments[i].department)
                 }
             }
         }
         if (opened) {
             Box(
-                modifier = Modifier.size(width = 50.dp, height = 50.dp),
-            )
+                modifier = Modifier
+                    .fillMaxSize()
+//                    .align(Alignment.Center)
+                    .background(color = Color(100,100,100).copy(0.8f)),
+
+            ){
+                Column(modifier = Modifier.size(width = 300.dp, height = 400.dp)
+                    .align(Alignment.Center)
+                    .background(color = Color.White)
+                ) {
+                    Text(text = "Book a day for ${homeUIState?.date}")
+                    Button(onClick = { opened = false }) {
+                        Text(text = "Cancel")
+                    }
+                }
+
+            }
         }
     }
 }
