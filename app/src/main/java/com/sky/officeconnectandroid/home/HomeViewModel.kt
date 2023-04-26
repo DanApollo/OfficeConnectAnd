@@ -25,7 +25,6 @@ class HomeViewModel (
     fun testFun (input: List<String>) {
         val app: MutableList<User> = mutableListOf()
         input.map {
-//            Log.d("testLog", "pass: $it")
             userRepository.setUserEventListener(it,
                 fun(i: User?) { app.add(i?: User()); homeUIState = homeUIState.copy( appointments = app); Log.d("testLog", "${homeUIState.appointments}");})
         }

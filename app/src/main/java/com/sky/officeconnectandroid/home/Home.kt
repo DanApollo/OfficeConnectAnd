@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import com.sky.officeconnectandroid.components.Calendar
 import com.sky.officeconnectandroid.components.MyAppointmentCard
 import java.time.LocalDate
@@ -115,23 +116,27 @@ fun Home(
             }
         }
         if (opened) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-//                    .align(Alignment.Center)
-                    .background(color = Color(100,100,100).copy(0.8f)),
+            Popup(
+                alignment = Alignment.Center,
+                onDismissRequest = { opened = false}
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color(100, 100, 100).copy(0.8f)),
 
-            ){
-                Column(modifier = Modifier.size(width = 300.dp, height = 400.dp)
-                    .align(Alignment.Center)
-                    .background(color = Color.White)
-                ) {
-                    Text(text = "Book a day for ${homeUIState?.date}")
-                    Button(onClick = { opened = false }) {
-                        Text(text = "Cancel")
+                    ){
+                    Column(modifier = Modifier
+                        .size(width = 300.dp, height = 400.dp)
+                        .align(Alignment.Center)
+                        .background(color = Color.White)
+                    ) {
+                        Text(text = "Book a day for ${homeUIState?.date}")
+                        Button(onClick = { opened = false }) {
+                            Text(text = "Cancel")
+                        }
                     }
                 }
-
             }
         }
     }
