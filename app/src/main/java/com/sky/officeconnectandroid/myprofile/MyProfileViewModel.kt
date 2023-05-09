@@ -1,18 +1,25 @@
 package com.sky.officeconnectandroid.myprofile
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
+import kotlinx.coroutines.launch
 
 class MyProfileViewModel(
     private val authRepository: AuthRepository = AuthRepository(),
     private val userRepository: UserRepository = UserRepository()
 ) : ViewModel() {
+    private val TAG: String = "MyProfileViewModel"
     private val userID: String
         get() = authRepository.getUserId()
 
@@ -21,16 +28,16 @@ class MyProfileViewModel(
 
     private fun updateUserState(input: User?) {
         myProfileUIState = myProfileUIState.copy(
-            name = input?.name ?: "",
-            jobTitle = input?.jobTitle ?: "",
-            location = input?.location ?: "",
-            department = input?.department ?: ""
+            user = input?: User(),
+            editableName = input?.name ?: "",
+            editableJobTitle = input?.jobTitle ?: "",
+            editableLocation = input?.location ?: "",
+            editableDepartment = input?.department ?: "",
         )
     }
-    fun updateUserData() {
+    init {
         userRepository.setUserEventListener(userID, ::updateUserState)
     }
-
     fun onNameChange(name: String) {
         myProfileUIState = myProfileUIState.copy(editableName = name)
     }
@@ -47,16 +54,17 @@ class MyProfileViewModel(
         myProfileUIState = myProfileUIState.copy(editableDepartment = department)
     }
 
-    fun onEditableToggle() {
-        if (!myProfileUIState.editable) {
-            myProfileUIState = myProfileUIState.copy(
-                editableName = myProfileUIState.name,
-                editableJobTitle = myProfileUIState.jobTitle,
-                editableLocation = myProfileUIState.location,
-                editableDepartment = myProfileUIState.department,
-            )
-        }
-        myProfileUIState = myProfileUIState.copy(editable = !myProfileUIState.editable)
+    fun onPasswordChange(password: String) {
+        myProfileUIState = myProfileUIState.copy(password = password)
+    }
+
+    fun onCancelEdit() {
+        myProfileUIState = myProfileUIState.copy(
+            editableName = myProfileUIState.user.name,
+            editableJobTitle = myProfileUIState.user.jobTitle,
+            editableLocation = myProfileUIState.user.location,
+            editableDepartment = myProfileUIState.user.department,
+        )
     }
 
     fun onUpdateUser() {
@@ -64,20 +72,27 @@ class MyProfileViewModel(
             myProfileUIState.editableName,
             myProfileUIState.editableLocation,
             myProfileUIState.editableDepartment,
-            myProfileUIState.editableJobTitle
+            myProfileUIState.editableJobTitle,
+            myProfileUIState.user.appointments
         )
         userRepository.updateUser(userID, user)
+    }
+    fun onDeleteUser(password: String) = viewModelScope.launch {
+        authRepository.reAuthUser(password) { isSuccessful ->
+            if (isSuccessful) {
+                Log.d(TAG, "Successful Re-Auth")
+            } else {
+                Log.e(TAG, "ERROR")
+            }
+        }
     }
 }
 
 data class MyProfileUIState(
-    val name: String = "",
-    val jobTitle: String = "",
-    val location: String = "",
-    val department: String = "",
+    val user: User = User(),
     val editableName: String = "",
     val editableJobTitle: String = "",
     val editableLocation: String = "",
     val editableDepartment: String = "",
-    val editable: Boolean = false
+    val password: String = "weewoo"
 )

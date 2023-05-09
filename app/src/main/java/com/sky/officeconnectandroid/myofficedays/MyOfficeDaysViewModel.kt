@@ -1,16 +1,16 @@
 package com.sky.officeconnectandroid.myofficedays
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.sky.officeconnectandroid.models.Appointment
-import com.sky.officeconnectandroid.models.DisplayAppointment
+import com.sky.officeconnectandroid.models.AppointmentCard
 import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AppointmentRepository
 import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MyOfficeDaysViewModel(
@@ -24,10 +24,10 @@ class MyOfficeDaysViewModel(
     var myOfficeDaysUIState by mutableStateOf(MyOfficeDaysUIState())
         private set
 
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy")
     private fun updateAppointmentsState(input: List<Appointment>) {
-        val formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy")
         myOfficeDaysUIState = myOfficeDaysUIState.copy(
-            appointments = input.map { DisplayAppointment(date = it.date.format(formatter), location = it.location) }
+            appointments = input.map { AppointmentCard(name = myOfficeDaysUIState.name, date = it.date.format(formatter), location = it.location) }
         )
     }
     private fun updateUserState(input: User?) {
@@ -36,6 +36,9 @@ class MyOfficeDaysViewModel(
         )
     }
 
+    fun deleteAppointment(date: String, location: String) {
+        appointmentRepository.deleteAppointment(LocalDate.parse(date, formatter), location, "Sky Go", userID)
+    }
     fun updateAppointmentsData() {
         appointmentRepository.setAppointmentEventListener(userID, ::updateAppointmentsState)
     }
@@ -45,6 +48,6 @@ class MyOfficeDaysViewModel(
 }
 
 data class MyOfficeDaysUIState(
-    val appointments: List<DisplayAppointment> = mutableListOf(),
+    val appointments: List<AppointmentCard> = listOf(),
     val name: String = "",
 )

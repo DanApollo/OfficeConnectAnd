@@ -1,6 +1,5 @@
 package com.sky.officeconnectandroid.repository
 
-import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -36,12 +35,34 @@ class UserRepository {
         database.child("users").child(userID).addValueEventListener(userListener)
     }
 
+
+    fun getUsers(updateUser: (input: HashMap<String, User>) -> Unit) {
+        database.child("users").addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val users = snapshot.getValue<HashMap<String, User>>()?: HashMap()
+                updateUser(users)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
     fun updateUser(userID: String, user: User) {
         val userValues = user.toMap()
 
         val childUpdates = hashMapOf<String, Any>(
             "/users/$userID" to userValues
         )
+        database.updateChildren(childUpdates)
+    }
+
+    fun deleteUser(userID: String, user: User) {
+        val childUpdates = hashMapOf<String, Any?>(
+            "/users/$userID" to null
+        )
+        for (i in user.appointments) childUpdates["/appointments/${i.key}/${user.location}/${user.department}/$userID"] = null
         database.updateChildren(childUpdates)
     }
 }

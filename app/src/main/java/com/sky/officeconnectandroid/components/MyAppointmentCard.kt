@@ -9,7 +9,9 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sky.officeconnectandroid.home.Home
 
 @Composable
 fun MyAppointmentCard(
@@ -53,4 +55,10 @@ fun MyAppointmentCard(
             }
         }
     }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+fun MyAppointmentCardPreview() {
+    MyAppointmentCard(name = "John Doe", jobTitle = "Developer", department = "Sky Go")
 }

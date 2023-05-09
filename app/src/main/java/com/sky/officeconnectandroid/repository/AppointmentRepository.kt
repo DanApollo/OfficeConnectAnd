@@ -9,6 +9,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.Appointment
 import com.sky.officeconnectandroid.models.User
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -30,6 +33,13 @@ class AppointmentRepository(
         database.child("users").child(userID).child("appointments").updateChildren(userAppointment)
     }
 
+    fun deleteAppointment(date: LocalDate, location: String, department: String, userID: String) {
+        val childUpdates = hashMapOf<String, Any?>(
+            "/appointments/${date.format(formatter)}/$location/$department/$userID" to null,
+            "/users/$userID/appointments/${date.format(formatter)}" to null,
+        )
+        database.updateChildren(childUpdates)
+    }
     fun setAppointmentEventListener(userID: String, updateAppointments: (input: List<Appointment>) -> Unit) {
         val appointmentListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

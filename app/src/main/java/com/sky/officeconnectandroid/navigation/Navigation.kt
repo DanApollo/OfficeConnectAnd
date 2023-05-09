@@ -23,7 +23,6 @@ fun Navigation(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
     myProfileViewModel: MyProfileViewModel,
-    newOfficeDayViewModel: NewOfficeDayViewModel,
     myOfficeDaysViewModel: MyOfficeDaysViewModel,
     homeViewModel: HomeViewModel
 ) {
@@ -80,11 +79,6 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 },
-                onNavToNewOfficeDay = {
-                    navController.navigate(Screen.NewOfficeDay.route) {
-                        launchSingleTop = true
-                    }
-                },
                 homeViewModel = homeViewModel
             )
         }
@@ -107,16 +101,6 @@ fun Navigation(
                     }
                 },
                 myProfileViewModel = myProfileViewModel
-            )
-        }
-        composable(route = Screen.NewOfficeDay.route) {
-            NewOfficeDay(
-                onNavToHomePage = {
-                    navController.navigate(Screen.HomeScreen.route) {
-                        launchSingleTop = true
-                    }
-                },
-                newOfficeDayViewModel = newOfficeDayViewModel
             )
         }
         composable(route = Screen.MyOfficeDays.route) {

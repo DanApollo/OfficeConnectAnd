@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sky.officeconnectandroid.R
+import com.sky.officeconnectandroid.components.SkyColourText
 
 @Composable
 fun LoginScreen(
@@ -66,26 +66,9 @@ fun LoginScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "Welcome!",
-                style = MaterialTheme.typography.h4,
+            SkyColourText(
+                text = "Welcome",
                 modifier = Modifier
-                    .graphicsLayer(alpha = 0.99f)
-                    .drawWithCache {
-                        val brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(245, 100, 0),
-                                Color(255, 0, 0),
-                                Color(181, 0, 125),
-                                Color(33, 66, 156),
-                                Color(0, 113, 255)
-                            )
-                        )
-                        onDrawWithContent {
-                            drawContent()
-                            drawRect(brush, blendMode = BlendMode.SrcAtop)
-                        }
-                    }
                     .padding(vertical = 10.dp)
             )
             if (isError) {
@@ -224,26 +207,9 @@ fun SignUpScreen(
                 .padding(top = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
+            SkyColourText(
                 text = "Let's get started",
-                style = MaterialTheme.typography.h4,
                 modifier = Modifier
-                    .graphicsLayer(alpha = 0.99f)
-                    .drawWithCache {
-                        val brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(245, 100, 0),
-                                Color(255, 0, 0),
-                                Color(181, 0, 125),
-                                Color(33, 66, 156),
-                                Color(0, 113, 255)
-                            )
-                        )
-                        onDrawWithContent {
-                            drawContent()
-                            drawRect(brush, blendMode = BlendMode.SrcAtop)
-                        }
-                    }
             )
             if (isError) {
                 Text(

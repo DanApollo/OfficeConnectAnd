@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sky.officeconnectandroid.components.AppointmentCard
-
 @Composable
 fun MyOfficeDays(
     myOfficeDaysViewModel: MyOfficeDaysViewModel? = null,
@@ -26,13 +25,14 @@ fun MyOfficeDays(
         }
         Text(text = "My Office Days")
         if (myOfficeDaysUIState?.appointments?.size!! > 0) {
-            for (i in myOfficeDaysUIState?.appointments!!) {
+            for (i in myOfficeDaysUIState.appointments) {
                 AppointmentCard(
                     name = myOfficeDaysUIState.name,
                     date = i.date,
-                    location = i.location)
+                    location = i.location,
+                    onDelete = { myOfficeDaysViewModel.deleteAppointment(i.date,i.location) }
+                )
             }
         }
-
     }
 }

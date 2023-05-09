@@ -15,7 +15,6 @@ class LoginViewModel(
     private val authRepository: AuthRepository = AuthRepository(),
     private val userRepository: UserRepository = UserRepository()
 ) : ViewModel() {
-    val currentUser = authRepository.currentUser
 
     val hasUser: Boolean
         get() = authRepository.hasUser()

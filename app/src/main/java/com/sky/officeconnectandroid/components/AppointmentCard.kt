@@ -1,33 +1,40 @@
 package com.sky.officeconnectandroid.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppointmentCard(
     name: String,
     date: String,
-    location: String
+    location: String,
+    onDelete: () -> Unit
 ) {
     Card(
         modifier = Modifier
-//            .clickable {  }
-            .fillMaxWidth()
-            .padding(15.dp),
+            .padding(15.dp)
+            .height(75.dp),
         elevation = 10.dp
     ) {
-        Box(modifier = Modifier.fillMaxWidth()){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
             Column(
                 modifier = Modifier
-                    .align(alignment = Alignment.CenterStart)
             ) {
                 Text(text = name)
                 Icon(
@@ -41,8 +48,6 @@ fun AppointmentCard(
             Column(
                 modifier = Modifier
                     .padding(5.dp)
-                    .align(alignment = Alignment.TopEnd),
-                horizontalAlignment = Alignment.End,
             ){
                 Text(
                     text = date,
@@ -52,6 +57,23 @@ fun AppointmentCard(
                     modifier = Modifier
                 )
             }
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = null,
+                Modifier
+                    .clickable(onClick = { onDelete.invoke() })
+            )
         }
     }
+}
+
+@Composable
+@Preview
+fun AppointmentCardPreview() {
+    AppointmentCard(
+        name = "",
+        date = "",
+        location = "",
+        onDelete = {}
+    )
 }

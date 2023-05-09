@@ -1,6 +1,5 @@
 package com.sky.officeconnectandroid.home
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,7 +10,7 @@ import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
 import java.time.LocalDate
 
-class HomeViewModel (
+class HomeViewModel(
     private val authRepository: AuthRepository = AuthRepository(),
     private val userRepository: UserRepository = UserRepository(),
     private val appointmentRepository: AppointmentRepository = AppointmentRepository()
@@ -22,46 +21,9 @@ class HomeViewModel (
     var homeUIState by mutableStateOf(HomeUIState())
         private set
 
-    fun testFun (input: List<String>) {
-        val app: MutableList<User> = mutableListOf()
-        input.map {
-            userRepository.setUserEventListener(it,
-                fun(i: User?) { app.add(i?: User()); homeUIState = homeUIState.copy( appointments = app); Log.d("testLog", "${homeUIState.appointments}");})
-        }
-    }
-
-    fun updateAppointmentsListState(date: LocalDate) {
-        homeUIState = homeUIState.copy(
-            appointments = mutableListOf()
-        )
-        appointmentRepository.getAppointmentOnDayEventListener(date, homeUIState.location, homeUIState.department, ::testFun)
-    }
-
-    fun updateLocation(location: String) {
-        homeUIState = homeUIState.copy(
-            location = location
-        )
-    }
-
-    private fun updateUserState(input: User?) {
-        homeUIState = homeUIState.copy(
-            department = input?.department ?: ""
-        )
-    }
-
-    fun updateUserData() {
+    init {
         userRepository.setUserEventListener(userID, ::updateUserState)
-    }
-
-    fun createAppointment() {
-        if (homeUIState.date !== null){
-            appointmentRepository.updateAppointment(
-                homeUIState.date!!,
-                homeUIState.location,
-                homeUIState.department,
-                userID
-            )
-        }
+        setAppointmentsListState(LocalDate.now())
     }
 
     fun setDate(date: LocalDate) {
@@ -69,12 +31,57 @@ class HomeViewModel (
             date = date
         )
     }
+
+    fun setLocation(location: String) {
+        homeUIState = homeUIState.copy(
+            location = location
+        )
+    }
+
+
+    private fun getAppointmentUsers(input: List<String>) {
+        userRepository.getUsers { userMap ->
+            val profiles = userMap.filter { input.contains(it.key) }.map { it.value }.toList()
+            homeUIState = homeUIState.copy(appointments = profiles)
+        }
+    }
+
+    fun setAppointmentsListState(date: LocalDate) {
+        appointmentRepository.getAppointmentOnDayEventListener(
+            date,
+            homeUIState.location,
+            homeUIState.department,
+            ::getAppointmentUsers
+        )
+    }
+
+
+
+    private fun updateUserState(input: User?) {
+        homeUIState = homeUIState.copy(
+            department = input?.department ?: "",
+            location = input?.location ?: "",
+        )
+    }
+
+    fun updateUserData() {
+
+    }
+
+    fun createAppointment() {
+        appointmentRepository.updateAppointment(
+            homeUIState.date,
+            homeUIState.location,
+            homeUIState.department,
+            userID
+        )
+    }
 }
 
 data class HomeUIState(
-    val appointments: MutableList<User> = mutableListOf(),
+    val appointments: List<User> = listOf(),
     val userIDs: List<String> = listOf(),
-    val location: String = "Osterley",
+    val location: String = "",
     val department: String = "",
     val date: LocalDate = LocalDate.now()
 )
