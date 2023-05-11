@@ -1,9 +1,11 @@
 package com.sky.officeconnectandroid.view.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -27,6 +29,7 @@ fun Calendar(
 ) {
     Column(
         modifier = Modifier
+            .fillMaxWidth(),
     ) {
         Row (
             modifier = Modifier
@@ -74,23 +77,29 @@ fun Calendar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                Arrangement.SpaceEvenly
+                    .height(55.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 for (j in 0 until CALENDAR_COLUMNS) {
                     val boxNumber = j+(i*7)+1 - (selectedDate.withDayOfMonth(1).dayOfWeek.value - 1)
                     Column(
                         modifier = Modifier
-                            .width(50.dp),
+                            .width(55.dp),
                     ) {
                         if (boxNumber > 0 && boxNumber <= selectedDate.lengthOfMonth()){
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clickable { onDayClick(selectedDate.withDayOfMonth(boxNumber)) }
-                                    .background(color = if (selectedDate.dayOfMonth == boxNumber) Color.Red else Color.White),
+                            OutlinedButton(
+                                onClick = { onDayClick(selectedDate.withDayOfMonth(boxNumber)) },
+                                border = BorderStroke(
+                                    2.dp,
+                                    if (selectedDate.dayOfMonth == boxNumber) Color.Blue else Color.LightGray
+                                ),
+                                shape = CircleShape,
+                                modifier = Modifier.fillMaxSize()
                             ) {
-                                Text(text = "$boxNumber")
+                                Text(
+                                    text = "$boxNumber",
+                                    modifier = Modifier
+                                )
                             }
                         }
                     }
