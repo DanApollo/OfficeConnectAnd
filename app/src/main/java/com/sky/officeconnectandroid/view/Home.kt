@@ -1,6 +1,5 @@
 package com.sky.officeconnectandroid.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +9,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.sky.officeconnectandroid.viewmodel.HomeViewModel
 import com.sky.officeconnectandroid.models.AppointmentCardModel
@@ -64,21 +62,13 @@ fun Home(
                     .padding(10.dp)
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(370.dp)
-                .background(Color.Gray),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Calendar(
-                selectedDate = homeUIState.date,
-                onDayClick = { day ->
-                    homeViewModel.setDate(day)
-                    homeViewModel.setAppointmentsListState(day)
-                }
-            )
-        }
+        Calendar(
+            selectedDate = homeUIState.date,
+            onDayClick = { day ->
+                homeViewModel.setDate(day)
+                homeViewModel.setAppointmentsListState(day)
+            }
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize(),
