@@ -1,6 +1,5 @@
-package com.sky.officeconnectandroid.home
+package com.sky.officeconnectandroid.view
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.sky.officeconnectandroid.components.*
+import com.sky.officeconnectandroid.viewmodel.HomeViewModel
 import com.sky.officeconnectandroid.models.AppointmentCardModel
 import com.sky.officeconnectandroid.view.components.AppointmentCard
 import com.sky.officeconnectandroid.view.components.Calendar

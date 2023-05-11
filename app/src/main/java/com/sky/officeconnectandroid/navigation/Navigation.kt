@@ -5,16 +5,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sky.officeconnectandroid.animatedsplash.AnimatedSplash
-import com.sky.officeconnectandroid.home.Home
-import com.sky.officeconnectandroid.home.HomeViewModel
-import com.sky.officeconnectandroid.login.LoginScreen
-import com.sky.officeconnectandroid.login.LoginViewModel
-import com.sky.officeconnectandroid.login.SignUpScreen
-import com.sky.officeconnectandroid.myofficedays.MyOfficeDays
-import com.sky.officeconnectandroid.myofficedays.MyOfficeDaysViewModel
-import com.sky.officeconnectandroid.myprofile.MyProfile
-import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
+import com.sky.officeconnectandroid.view.AnimatedSplash
+import com.sky.officeconnectandroid.view.Home
+import com.sky.officeconnectandroid.viewmodel.HomeViewModel
+import com.sky.officeconnectandroid.view.LoginScreen
+import com.sky.officeconnectandroid.viewmodel.LoginViewModel
+import com.sky.officeconnectandroid.view.SignUpScreen
+import com.sky.officeconnectandroid.view.MyOfficeDays
+import com.sky.officeconnectandroid.viewmodel.MyOfficeDaysViewModel
+import com.sky.officeconnectandroid.view.MyProfile
+import com.sky.officeconnectandroid.viewmodel.MyProfileViewModel
 
 @Composable
 fun Navigation(

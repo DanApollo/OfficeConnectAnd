@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.myofficedays
+package com.sky.officeconnectandroid.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

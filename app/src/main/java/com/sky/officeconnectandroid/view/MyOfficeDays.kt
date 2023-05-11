@@ -1,22 +1,20 @@
-package com.sky.officeconnectandroid.myofficedays
+package com.sky.officeconnectandroid.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sky.officeconnectandroid.viewmodel.MyOfficeDaysViewModel
 import com.sky.officeconnectandroid.view.components.AppointmentCard
-import com.sky.officeconnectandroid.models.AppointmentCardModel
 
 @Composable
 fun MyOfficeDays(

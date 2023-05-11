@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.login
+package com.sky.officeconnectandroid.viewmodel
 
 import android.content.Context
 import android.widget.Toast

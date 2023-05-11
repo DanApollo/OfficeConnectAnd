@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.myprofile
+package com.sky.officeconnectandroid.viewmodel
 
 import android.content.Context
 import android.util.Log

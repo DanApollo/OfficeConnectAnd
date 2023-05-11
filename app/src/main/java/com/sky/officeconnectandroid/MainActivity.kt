@@ -6,15 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sky.officeconnectandroid.home.HomeViewModel
-import com.sky.officeconnectandroid.login.LoginViewModel
-import com.sky.officeconnectandroid.myofficedays.MyOfficeDaysViewModel
-import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
+import com.sky.officeconnectandroid.viewmodel.HomeViewModel
+import com.sky.officeconnectandroid.viewmodel.LoginViewModel
+import com.sky.officeconnectandroid.viewmodel.MyOfficeDaysViewModel
+import com.sky.officeconnectandroid.viewmodel.MyProfileViewModel
 import com.sky.officeconnectandroid.navigation.Navigation
 import com.sky.officeconnectandroid.ui.theme.OfficeConnectAndTheme
 
@@ -41,18 +38,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    OfficeConnectAndTheme {
-        Greeting("Android")
     }
 }
