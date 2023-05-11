@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.components
+package com.sky.officeconnectandroid.view.components
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

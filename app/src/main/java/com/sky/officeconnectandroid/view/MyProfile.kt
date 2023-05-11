@@ -3,6 +3,7 @@ package com.sky.officeconnectandroid.myprofile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,18 +14,24 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sky.officeconnectandroid.components.SkyButton
-import com.sky.officeconnectandroid.components.SkyColourText
+import com.sky.officeconnectandroid.view.components.PopupModal
+import com.sky.officeconnectandroid.view.components.SkyButton
+import com.sky.officeconnectandroid.view.components.SkyColourText
 
 @Composable
 fun MyProfile(
@@ -33,6 +40,7 @@ fun MyProfile(
     onNavToMyOfficeDays: () -> Unit,
     onNavToLoginPage: () -> Unit
 ) {
+    val context = LocalContext.current
     val myProfileUIState = myProfileViewModel.myProfileUIState
     val editedName = myProfileUIState.user.name != myProfileUIState.editableName
     val editedJobTitle = myProfileUIState.user.jobTitle != myProfileUIState.editableJobTitle
@@ -44,6 +52,9 @@ fun MyProfile(
     }
     var deleteAccountPopup by remember {
         mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = true) {
+        myProfileViewModel.setUserEventListener()
     }
     Column(
         modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
@@ -182,8 +193,6 @@ fun MyProfile(
                 style = TextStyle(textDecoration = TextDecoration.Underline),
                 modifier = Modifier
                     .clickable {
-//                        myProfileViewModel.onDeleteUser(context)
-//                        onNavToLoginPage.invoke()
                         deleteAccountPopup = true
                     }
                     .padding(10.dp)
@@ -191,24 +200,21 @@ fun MyProfile(
             )
         }
         if (logOutPopup) {
-            Popup(
-                alignment = Alignment.Center,
-                onDismissRequest = { logOutPopup = false}
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color(100, 100, 100).copy(0.8f)),
-                    ){
-                    Column(modifier = Modifier
-                        .size(width = 300.dp, height = 400.dp)
-                        .align(Alignment.Center)
-                        .background(color = Color.White)
+            PopupModal(
+                toggleOff = { logOutPopup = false },
+                title = "Log out",
+                children = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SkyColourText(
-                            text = "Log out",
-                            modifier = Modifier
-                        )
+                        Button(
+                            onClick = { logOutPopup = false }
+                        ) {
+                            Text(text = "Cancel")
+                        }
                         Button(
                             onClick = {
                                 Firebase.auth.signOut()
@@ -216,45 +222,48 @@ fun MyProfile(
                             }) {
                             Text(text = "Log out")
                         }
-                        Button(onClick = { logOutPopup = false }) {
-                            Text(text = "Cancel")
-                        }
                     }
                 }
-            }
+            )
         }
         if (deleteAccountPopup) {
-            Popup(
-                alignment = Alignment.Center,
-                onDismissRequest = { deleteAccountPopup = false}
+            PopupModal(
+                toggleOff = { deleteAccountPopup = false },
+                title = "Delete Account"
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color(100, 100, 100).copy(0.8f)),
-                ){
-                    Column(modifier = Modifier
-                        .size(width = 300.dp, height = 400.dp)
-                        .align(Alignment.Center)
-                        .background(color = Color.White)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TextField(
+                        value = myProfileUIState.password,
+                        onValueChange = { myProfileViewModel.onPasswordChange(it) },
+                        placeholder = {
+                            Text(text = "Password")
+                        },
+                        visualTransformation = PasswordVisualTransformation()
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SkyColourText(
-                            text = "Delete Account",
-                            modifier = Modifier
-                        )
-                        TextField(
-                            value = myProfileUIState.password,
-                            onValueChange = { myProfileViewModel.onPasswordChange(it) }
-                        )
-                        Text(text = myProfileUIState.password)
-                        Button(
-                            onClick = {
-                                myProfileViewModel.onDeleteUser(myProfileUIState.password)
-                            }) {
-                            Text(text = "Delete")
-                        }
                         Button(onClick = { deleteAccountPopup = false }) {
                             Text(text = "Cancel")
+                        }
+                        Button(
+                            onClick = {
+                                myProfileViewModel
+                                    .onDeleteUser(context, myProfileUIState.password) {isSuccessful ->
+                                        if (isSuccessful) {
+                                            Firebase.auth.signOut()
+                                            onNavToLoginPage.invoke()
+                                        }
+                                    }
+                            }) {
+                            Text(text = "Delete")
                         }
                     }
                 }

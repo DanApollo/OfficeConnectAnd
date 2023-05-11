@@ -8,8 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AuthRepository
 import com.sky.officeconnectandroid.repository.UserRepository
@@ -19,7 +17,6 @@ class MyProfileViewModel(
     private val authRepository: AuthRepository = AuthRepository(),
     private val userRepository: UserRepository = UserRepository()
 ) : ViewModel() {
-    private val TAG: String = "MyProfileViewModel"
     private val userID: String
         get() = authRepository.getUserId()
 
@@ -35,7 +32,8 @@ class MyProfileViewModel(
             editableDepartment = input?.department ?: "",
         )
     }
-    init {
+
+    fun setUserEventListener() {
         userRepository.setUserEventListener(userID, ::updateUserState)
     }
     fun onNameChange(name: String) {
@@ -58,6 +56,9 @@ class MyProfileViewModel(
         myProfileUIState = myProfileUIState.copy(password = password)
     }
 
+    fun onEmailChange(email: String) {
+        myProfileUIState = myProfileUIState.copy(email = email)
+    }
     fun onCancelEdit() {
         myProfileUIState = myProfileUIState.copy(
             editableName = myProfileUIState.user.name,
@@ -77,13 +78,42 @@ class MyProfileViewModel(
         )
         userRepository.updateUser(userID, user)
     }
-    fun onDeleteUser(password: String) = viewModelScope.launch {
-        authRepository.reAuthUser(password) { isSuccessful ->
-            if (isSuccessful) {
-                Log.d(TAG, "Successful Re-Auth")
-            } else {
-                Log.e(TAG, "ERROR")
+    fun onDeleteUser(
+        context: Context,
+        password: String,
+        onComplete: (Boolean) -> Unit
+    ) = viewModelScope.launch {
+        try {
+            authRepository.reAuthUser(password) { isSuccessful ->
+                if (isSuccessful) {
+                    userRepository.deleteUser(userID, myProfileUIState.user)
+                    Toast.makeText(
+                        context,
+                        "Account data deleted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Failed login.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
+            authRepository.deleteUser { isSuccessful ->
+                if (isSuccessful) {
+                    onComplete.invoke(true)
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Failed delete",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("testLog", userID)
+            Log.d("testLog", "error: ${e.localizedMessage}")
         }
     }
 }
@@ -94,5 +124,6 @@ data class MyProfileUIState(
     val editableJobTitle: String = "",
     val editableLocation: String = "",
     val editableDepartment: String = "",
-    val password: String = "weewoo"
+    val email: String = "",
+    val password: String = ""
 )

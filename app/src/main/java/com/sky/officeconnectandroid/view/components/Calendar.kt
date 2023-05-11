@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.components
+package com.sky.officeconnectandroid.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,18 +6,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val CALENDAR_ROWS = 6
 private const val CALENDAR_COLUMNS = 7
-
+private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM - yyyy")
 @Composable
-fun NewCalendar(
+fun Calendar(
     selectedDate: LocalDate,
     onDayClick: (LocalDate) -> Unit
 ) {
@@ -25,12 +26,16 @@ fun NewCalendar(
         modifier = Modifier
     ) {
         Row (
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 5.dp, end = 5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ){
             Button(onClick = { onDayClick(selectedDate.minusMonths(1)) }) {
                 Text(text = "<")
             }
-            Text(text = selectedDate.month.toString())
+            Text(text = selectedDate.format(formatter))
             Button(onClick = { onDayClick(selectedDate.plusMonths(1)) }) {
                 Text(text = ">")
             }
@@ -80,7 +85,7 @@ fun NewCalendar(
 @Composable
 fun PrevNewCalendar(
 ) {
-    NewCalendar(
+    Calendar(
         selectedDate = LocalDate.now(),
         onDayClick = {}
     )

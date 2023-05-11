@@ -15,8 +15,6 @@ import com.sky.officeconnectandroid.myofficedays.MyOfficeDays
 import com.sky.officeconnectandroid.myofficedays.MyOfficeDaysViewModel
 import com.sky.officeconnectandroid.myprofile.MyProfile
 import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
-import com.sky.officeconnectandroid.newofficeday.NewOfficeDay
-import com.sky.officeconnectandroid.newofficeday.NewOfficeDayViewModel
 
 @Composable
 fun Navigation(
@@ -107,6 +105,11 @@ fun Navigation(
             MyOfficeDays(
                 onNavToMyProfile = {
                     navController.navigate(Screen.MyProfile.route) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavToHomePage = {
+                    navController.navigate(Screen.HomeScreen.route) {
                         launchSingleTop = true
                     }
                 },

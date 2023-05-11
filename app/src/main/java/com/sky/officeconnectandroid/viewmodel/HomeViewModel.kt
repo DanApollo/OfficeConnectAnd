@@ -1,5 +1,6 @@
 package com.sky.officeconnectandroid.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,11 +22,9 @@ class HomeViewModel(
     var homeUIState by mutableStateOf(HomeUIState())
         private set
 
-    init {
+    fun setUserEventListener() {
         userRepository.setUserEventListener(userID, ::updateUserState)
-        setAppointmentsListState(LocalDate.now())
     }
-
     fun setDate(date: LocalDate) {
         homeUIState = homeUIState.copy(
             date = date

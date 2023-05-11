@@ -1,4 +1,4 @@
-package com.sky.officeconnectandroid.components
+package com.sky.officeconnectandroid.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

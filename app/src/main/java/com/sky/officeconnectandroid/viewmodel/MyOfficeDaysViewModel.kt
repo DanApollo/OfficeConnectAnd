@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.sky.officeconnectandroid.models.Appointment
-import com.sky.officeconnectandroid.models.AppointmentCard
+import com.sky.officeconnectandroid.models.AppointmentCardModel
 import com.sky.officeconnectandroid.models.User
 import com.sky.officeconnectandroid.repository.AppointmentRepository
 import com.sky.officeconnectandroid.repository.AuthRepository
@@ -27,12 +27,20 @@ class MyOfficeDaysViewModel(
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy")
     private fun updateAppointmentsState(input: List<Appointment>) {
         myOfficeDaysUIState = myOfficeDaysUIState.copy(
-            appointments = input.map { AppointmentCard(name = myOfficeDaysUIState.name, date = it.date.format(formatter), location = it.location) }
+            appointments = input.map {
+                AppointmentCardModel(
+                    name = myOfficeDaysUIState.user.name,
+                    location = it.location,
+                    department = myOfficeDaysUIState.user.department,
+                    jobTitle = myOfficeDaysUIState.user.jobTitle,
+                    date = it.date.format(formatter),
+                )
+            }
         )
     }
     private fun updateUserState(input: User?) {
         myOfficeDaysUIState = myOfficeDaysUIState.copy(
-            name = input?.name ?: ""
+            user = input?: User()
         )
     }
 
@@ -48,6 +56,6 @@ class MyOfficeDaysViewModel(
 }
 
 data class MyOfficeDaysUIState(
-    val appointments: List<AppointmentCard> = listOf(),
-    val name: String = "",
+    val appointments: List<AppointmentCardModel> = listOf(),
+    val user: User = User(),
 )

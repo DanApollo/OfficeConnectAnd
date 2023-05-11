@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sky.officeconnectandroid.R
-import com.sky.officeconnectandroid.components.SkyColourText
+import com.sky.officeconnectandroid.view.components.SkyColourText
 
 @Composable
 fun LoginScreen(
