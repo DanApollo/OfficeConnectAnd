@@ -3,8 +3,11 @@ package com.sky.officeconnectandroid.view.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,13 +35,19 @@ fun Calendar(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Button(onClick = { onDayClick(selectedDate.minusMonths(1)) }) {
-                Text(text = "<")
-            }
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable { onDayClick(selectedDate.minusMonths(1)) }
+            )
             Text(text = selectedDate.format(formatter))
-            Button(onClick = { onDayClick(selectedDate.plusMonths(1)) }) {
-                Text(text = ">")
-            }
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable { onDayClick(selectedDate.plusMonths(1)) }
+            )
         }
         Row(
             modifier = Modifier
@@ -47,9 +56,19 @@ fun Calendar(
             Arrangement.SpaceEvenly
         ) {
             for (day in listOf("Mon","Tue","Wed","Thu","Fri","Sat","Sun")) {
-                Text(text = day)
+                Column(
+                    modifier = Modifier
+                        .width(50.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        Alignment.Center
+                    ) {
+                        Text(text = day)
+                    }
+                }
             }
-
         }
         for (i in 0 until CALENDAR_ROWS) {
             Row(
