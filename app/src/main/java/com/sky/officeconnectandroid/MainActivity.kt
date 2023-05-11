@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sky.officeconnectandroid.home.HomeViewModel
 import com.sky.officeconnectandroid.login.LoginViewModel
 import com.sky.officeconnectandroid.myofficedays.MyOfficeDaysViewModel
 import com.sky.officeconnectandroid.myprofile.MyProfileViewModel
 import com.sky.officeconnectandroid.navigation.Navigation
-import com.sky.officeconnectandroid.newofficeday.NewOfficeDayViewModel
 import com.sky.officeconnectandroid.ui.theme.OfficeConnectAndTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,8 +24,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
             val myProfileViewModel = viewModel(modelClass = MyProfileViewModel::class.java)
-            val newOfficeDayViewModel = viewModel(modelClass = NewOfficeDayViewModel::class.java)
             val myOfficeDaysViewModel = viewModel(modelClass = MyOfficeDaysViewModel::class.java)
+            val homeViewModel = viewModel(modelClass = HomeViewModel::class.java)
             OfficeConnectAndTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
                     Navigation(
                         loginViewModel = loginViewModel,
                         myProfileViewModel = myProfileViewModel,
-                        newOfficeDayViewModel = newOfficeDayViewModel,
-                        myOfficeDaysViewModel = myOfficeDaysViewModel
+                        myOfficeDaysViewModel = myOfficeDaysViewModel,
+                        homeViewModel = homeViewModel
                     )
                 }
             }

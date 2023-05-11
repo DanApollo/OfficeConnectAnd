@@ -10,6 +10,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class UserRepository {
 
@@ -36,12 +39,38 @@ class UserRepository {
         database.child("users").child(userID).addValueEventListener(userListener)
     }
 
+
+    fun getUsers(updateUser: (input: HashMap<String, User>) -> Unit) {
+        database.child("users").addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val users = snapshot.getValue<HashMap<String, User>>()?: HashMap()
+                updateUser(users)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
     fun updateUser(userID: String, user: User) {
         val userValues = user.toMap()
 
         val childUpdates = hashMapOf<String, Any>(
             "/users/$userID" to userValues
         )
+        database.updateChildren(childUpdates)
+    }
+
+    fun deleteUser(
+        userID: String,
+        user: User
+    ) {
+        val childUpdates = hashMapOf<String, Any?>(
+            "/users/${userID!!}" to null
+        )
+        for (i in user.appointments) childUpdates["/appointments/${i.key}/${user.location}/${user.department}/${userID!!}"] = null
+        Log.d("testLog", "userID: $userID")
         database.updateChildren(childUpdates)
     }
 }

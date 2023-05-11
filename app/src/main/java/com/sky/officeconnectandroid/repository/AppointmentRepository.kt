@@ -9,23 +9,37 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sky.officeconnectandroid.models.Appointment
 import com.sky.officeconnectandroid.models.User
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class AppointmentRepository {
+class AppointmentRepository(
+    private val userRepository: UserRepository = UserRepository()
+) {
 
     private val database: DatabaseReference = Firebase.database.reference
 
-    fun updateAppointment(date: String, location: String, department: String, userID: String) {
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+
+    fun updateAppointment(date: LocalDate, location: String, department: String, userID: String) {
         val appointment = mapOf(userID to true)
-        val userAppointment = mapOf(date to location)
+        val userAppointment = mapOf(date.format(formatter) to location)
         // Two separate updateChildren calls for the same action risk inconsistencies in db updates.
         // When possible best to update to one updateChildren call updating both addresses.
-        database.child("appointments").child(date).child(location).child(department).updateChildren(appointment)
+        database.child("appointments").child(date.format(formatter)).child(location).child(department).updateChildren(appointment)
         database.child("users").child(userID).child("appointments").updateChildren(userAppointment)
     }
 
+    fun deleteAppointment(date: LocalDate, location: String, department: String, userID: String) {
+        val childUpdates = hashMapOf<String, Any?>(
+            "/appointments/${date.format(formatter)}/$location/$department/$userID" to null,
+            "/users/$userID/appointments/${date.format(formatter)}" to null,
+        )
+        database.updateChildren(childUpdates)
+    }
     fun setAppointmentEventListener(userID: String, updateAppointments: (input: List<Appointment>) -> Unit) {
         val appointmentListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -34,7 +48,7 @@ class AppointmentRepository {
                     snapshotMap.mapNotNull {
                         try {
                             Appointment(
-                                date = LocalDate.parse(it.key),
+                                date = LocalDate.parse(it.key, formatter),
                                 location = it.value)
                         } catch (e : DateTimeParseException) {
                             null
@@ -50,5 +64,25 @@ class AppointmentRepository {
             }
         }
         database.child("users").child(userID).child("appointments").addValueEventListener(appointmentListener)
+    }
+
+    fun getAppointmentOnDayEventListener(date: LocalDate, location: String, department: String, updateUsers: (input: List<String>) -> Unit) {
+        val appointmentListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val appointmentList: List<String> = if (snapshot.value != null) {
+                    val snapshotMap = snapshot.value as MutableMap<String, Boolean>
+                    snapshotMap.mapNotNull {
+                        it.key
+                    }
+                } else {
+                    listOf()
+                }
+                updateUsers(appointmentList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        }
+        database.child("appointments").child(date.format(formatter)).child(location).child(department).addValueEventListener(appointmentListener)
     }
 }
