@@ -21,7 +21,6 @@ class MyProfileViewModel(
         get() = authRepository.getUserId()
 
     var myProfileUIState by mutableStateOf(MyProfileUIState())
-        private set
 
     private fun updateUserState(input: User?) {
         myProfileUIState = myProfileUIState.copy(
@@ -56,9 +55,6 @@ class MyProfileViewModel(
         myProfileUIState = myProfileUIState.copy(password = password)
     }
 
-    fun onEmailChange(email: String) {
-        myProfileUIState = myProfileUIState.copy(email = email)
-    }
     fun onCancelEdit() {
         myProfileUIState = myProfileUIState.copy(
             editableName = myProfileUIState.user.name,
@@ -112,7 +108,6 @@ class MyProfileViewModel(
                 }
             }
         } catch (e: Exception) {
-            Log.d("testLog", userID)
             Log.d("testLog", "error: ${e.localizedMessage}")
         }
     }
@@ -124,6 +119,5 @@ data class MyProfileUIState(
     val editableJobTitle: String = "",
     val editableLocation: String = "",
     val editableDepartment: String = "",
-    val email: String = "",
     val password: String = ""
 )

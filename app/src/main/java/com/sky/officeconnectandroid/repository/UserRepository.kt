@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class UserRepository {
 
-    fun getUserId(): String = Firebase.auth.currentUser?.uid.orEmpty()
+    private fun getUserId(): String = Firebase.auth.currentUser?.uid.orEmpty()
 
     private val database: DatabaseReference = Firebase.database.reference
 
@@ -70,7 +70,6 @@ class UserRepository {
             "/users/${userID!!}" to null
         )
         for (i in user.appointments) childUpdates["/appointments/${i.key}/${user.location}/${user.department}/${userID!!}"] = null
-        Log.d("testLog", "userID: $userID")
         database.updateChildren(childUpdates)
     }
 }

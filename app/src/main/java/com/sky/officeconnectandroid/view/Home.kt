@@ -5,11 +5,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import com.sky.officeconnectandroid.viewmodel.HomeViewModel
 import com.sky.officeconnectandroid.models.AppointmentCardModel
 import com.sky.officeconnectandroid.view.components.AppointmentCard
@@ -25,18 +29,11 @@ fun Home(
 ) {
     val homeUIState = homeViewModel.homeUIState
 
-    var expanded by remember {
+    var bookDayPopup by remember {
         mutableStateOf(false)
     }
-    var opened by remember {
+    var selectLocation by remember {
         mutableStateOf(false)
-    }
-    LaunchedEffect(key1 = true) {
-        val date = LocalDate.now()
-        homeViewModel.setDate(date)
-        homeViewModel.setAppointmentsListState(date)
-        homeViewModel.setUserEventListener()
-
     }
     Column(
         Modifier
@@ -64,9 +61,13 @@ fun Home(
         }
         Calendar(
             selectedDate = homeUIState.date,
+            heatMap = homeUIState.heatMap,
+            today = homeUIState.today,
             onDayClick = { day ->
-                homeViewModel.setDate(day)
-                homeViewModel.setAppointmentsListState(day)
+                homeViewModel.filterUsersOnDay(homeUIState.monthAppointments,day, "Osterley")
+            },
+            onMonthClick = {day ->
+                homeViewModel.filterUsersOnMonth(homeUIState.users, day, "Osterley")
             }
         )
         Column(
@@ -74,27 +75,100 @@ fun Home(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SkyButton(
-                onClick = { opened = true },
-                text = "Book a Day",
+            Box (
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(50.dp)
-                    .padding(top = 10.dp)
-            )
+                    .fillMaxWidth()
+                    .height(50.dp),
+            ){
+                if (homeUIState.userDay) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(50.dp)
+                            .padding(top = 10.dp)
+                            .align(Alignment.Center),
+                        Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "See you there!")
+                            Text(
+                                text = "You've booked this day.",
+                                color = Color.LightGray,
+                                fontSize = 14.sp
+                            )
+                        }
+
+                    }
+                } else {
+                    SkyButton(
+                        onClick = { bookDayPopup = true },
+                        text = "Book a Day",
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(50.dp)
+                            .padding(top = 10.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.1f)
+                        .height(50.dp)
+                        .align(Alignment.CenterEnd)
+                        .clickable {
+                            selectLocation = true
+                        }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+//                    if (selectLocation) {
+//                        Popup(
+//                            onDismissRequest = { selectLocation = false }
+//                        ) {
+//                            LazyColumn(){
+//                                items(
+//                                    2
+//                                ) {
+//                                    Text(
+//                                        text = "Osterley",
+//                                        modifier = Modifier.clickable {
+//                                            homeViewModel.setLocation("Osterley")
+//                                            selectLocation = false
+//                                        })
+//                                    Text(
+//                                        text = "Leeds",
+//                                        modifier = Modifier.clickable {
+//                                            homeViewModel.setLocation("Leeds")
+//                                            selectLocation = false
+//                                        })
+//                                }
+//                            }
+//                        }
+//                    }
+                }
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 items(
-                    homeUIState.appointments.size
+                    homeUIState.dayAppointments.size
                 ) { i ->
                     AppointmentCard(
                         isUser = false,
                         appointment = AppointmentCardModel(
-                            name = homeUIState.appointments[i].name,
+                            name = homeUIState.dayAppointments[i].name,
                             location = "",
-                            department = homeUIState.appointments[i].department,
-                            jobTitle = homeUIState.appointments[i].jobTitle,
+                            department = homeUIState.dayAppointments[i].department,
+                            jobTitle = homeUIState.dayAppointments[i].jobTitle,
                             date = "",
                         ),
                         onDelete = {}
@@ -103,9 +177,9 @@ fun Home(
             }
         }
     }
-    if (opened) {
+    if (bookDayPopup) {
         PopupModal(
-            toggleOff = { opened = false },
+            toggleOff = { bookDayPopup = false },
             title = "Book a Day"
         ) {
             Column(
@@ -122,13 +196,13 @@ fun Home(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(onClick = { opened = false }) {
+                    Button(onClick = { bookDayPopup = false }) {
                         Text(text = "Cancel")
                     }
                     Button(
                         onClick = {
                             homeViewModel.createAppointment()
-                            opened = false
+                            bookDayPopup = false
                         }
                     ) {
                         Text(text = "Book Day")

@@ -58,7 +58,7 @@ class LoginViewModel(
         loginUIState = loginUIState.copy(confirmPasswordSignUp = password)
     }
 
-    private fun validateLoginForm() =
+    fun validateLoginForm() =
         loginUIState.email.isNotBlank() &&
                 loginUIState.password.isNotBlank()
 
@@ -135,20 +135,20 @@ class LoginViewModel(
                 loginUIState.email,
                 loginUIState.password
             ) { isSuccessful ->
-                if (isSuccessful) {
+                loginUIState = if (isSuccessful) {
                     Toast.makeText(
                         context,
                         "Successful login.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUIState = loginUIState.copy(isSuccessLogin = true)
+                    loginUIState.copy(isSuccessLogin = true)
                 } else {
                     Toast.makeText(
                         context,
                         "Failed login.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUIState = loginUIState.copy(isSuccessLogin = false)
+                    loginUIState.copy(isSuccessLogin = false)
                 }
             }
         } catch (e: Exception) {

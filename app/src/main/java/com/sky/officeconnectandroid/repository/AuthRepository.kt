@@ -1,8 +1,5 @@
 package com.sky.officeconnectandroid.repository
 
-import android.util.Log
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.core.os.bundleOf
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -25,7 +22,7 @@ class AuthRepository {
         email: String,
         password: String,
         onComplete: (Boolean) -> Unit
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         Firebase.auth
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
@@ -41,7 +38,7 @@ class AuthRepository {
         email: String,
         password: String,
         onComplete: (Boolean) -> Unit
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         Firebase.auth
             .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
